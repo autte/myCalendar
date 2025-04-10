@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Calendar AI | Find & Sync Shared Calendars</title>
+    <meta name="description" content="My Calendar AI helps you easily find your city or school's shared calendar and sync it with your Google, Apple, or Outlook calendar.">
+    <meta name="keywords" content="shared calendar, city calendar, school calendar, sync calendar, google calendar, apple calendar, outlook calendar, embed calendar, AI">
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* ============================== */
+        /* CSS Variables & Base Styles  */
+        /* ============================== */
+        :root {
+            /* Color Palette */
+            --navy-blue: #0a192f;
+            --light-navy: #112240;
+            --lightest-navy: #233554;
+            --slate-gray: #8892b0;
+            --light-slate: #a8b2d1;
+            --lightest-slate: #ccd6f6;
+            --white: #ffffff;
+            --neon-green: #64ffda;
+            --neon-green-tint: rgba(100, 255, 218, 0.1);
+
+            /* Typography */
+            --font-sans: 'Open Sans', sans-serif;
+            --font-headings: 'Poppins', sans-serif;
+
+            /* Font Sizes (Example Scale) */
+            --fz-xs: 13px;
+            --fz-sm: 14px;
+            --fz-md: 16px;
+            --fz-lg: 18px;
+            --fz-xl: 20px;
+            --fz-xxl: 24px;
+            --fz-heading: 32px;
+            --fz-hero-heading: clamp(40px, 8vw, 60px); /* Responsive heading */
+
+            /* Layout & Spacing */
+            --border-radius: 4px;
+            --nav-height: 80px;
+            --section-padding: 80px 0;
+            --container-padding: 0 25px;
+            --max-width: 1100px;
+
+            /* Transitions & Effects */
+            --easing: cubic-bezier(0.645, 0.045, 0.355, 1);
+            --transition: all 0.25s var(--easing);
+
+            /* Theming (Dark Default) */
+            --bg-color: var(--navy-blue);
+            --text-color-primary: var(--lightest-slate);
+            --text-color-secondary: var(--slate-gray);
+            --heading-color: var(--white);
+            --accent-color: var(--neon-green);
+            --card-bg: var(--light-navy);
+            --border-color: var(--lightest-navy);
+            --button-text-color: var(--navy-blue);
+            --header-bg: rgba(10, 25, 47, 0.85); /* Semi-transparent header */
+            --box-shadow: rgba(2, 12, 27, 0.7) 0px 10px 30px -15px;
+            --iframe-border: var(--lightest-navy);
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-color: #f4f7fc; /* Light grayish blue */
+            --text-color-primary: #333;
+            --text-color-secondary: #555;
+            --heading-color: #1a202c; /* Darker heading */
+            --accent-color: #3182ce; /* Adjusted blue accent for light */
+            --card-bg: var(--white);
+            --border-color: #e2e8f0; /* Light gray border */
+            --button-text-color: var(--white);
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --navy-blue: #0a192f; /* Keep original names accessible */
+            --neon-green: var(--accent-color); /* Map neon green var to new accent */
+            --neon-green-tint: rgba(49, 130, 206, 0.1);
+            --iframe-border: #ccc;
+        }
+
+        /* Global Resets & Base Styles */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--slate-gray) var(--navy-blue); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background-color: var(--slate-gray); border-radius: 10px; }
+        body {
+            font-family: var(--font-sans);
+            font-size: var(--fz-md);
+            line-height: 1.6;
+            color: var(--text-color-primary);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        main { padding-top: var(--nav-height); } /* Space for fixed header */
+        section { padding: var(--section-padding); }
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: var(--container-padding);
+        }
+
+        /* Headings & Text */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-headings);
+            color: var(--heading-color);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        h1 { font-size: var(--fz-hero-heading); }
+        h2 { font-size: var(--fz-heading); }
+        h3 { font-size: var(--fz-xxl); }
+        p { margin-bottom: 1.5rem; color: var(--text-color-primary); }
+        p.secondary { color: var(--text-color-secondary); font-size: var(--fz-sm); }
+        a { color: var(--accent-color); text-decoration: none; transition: var(--transition); }
+        a:hover, a:focus { opacity: 0.8; text-decoration: underline; text-decoration-color: var(--accent-color); }
+
+        /* Buttons */
+        .btn {
+            display: inline-block; /* Allows margin/padding */
+            cursor: pointer;
+            border: 1px solid var(--accent-color);
+            border-radius: var(--border-radius);
+            padding: 0.8rem 1.75rem;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            font-family: var(--font-headings); /* Use heading font for buttons */
+            font-size: var(--fz-sm);
+            font-weight: 600;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none; /* For <a> elements styled as buttons */
+        }
+        .btn:hover, .btn:focus {
+            background-color: transparent;
+            color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent-color); /* Focus indicator */
+        }
+        .btn i { margin-right: 8px; }
+
+        /* Forms */
+        input[type="search"], input[type="text"] {
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg);
+            color: var(--text-color-primary);
+            font-size: var(--fz-md);
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="search"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--neon-green-tint);
+        }
+
+        /* ============================== */
+        /* Header & Navigation          */
+        /* ============================== */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--container-padding);
+            background-color: var(--header-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: height 0.3s ease, background-color 0.3s ease;
+        }
+        .site-logo a {
+            font-family: var(--font-headings);
+            font-size: var(--fz-xl);
+            font-weight: 700;
+            color: var(--heading-color);
+            text-decoration: none;
+        }
+        .site-logo span { color: var(--accent-color); }
+        .main-navigation { display: flex; align-items: center; gap: 15px; }
+        .nav-menu { display: flex; gap: 20px; list-style: none; }
+        .nav-menu a {
+            font-family: var(--font-headings);
+            font-size: var(--fz-sm);
+            color: var(--text-color-primary);
+            padding: 10px;
+            text-decoration: none;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--accent-color); text-decoration: none; }
+
+        .theme-toggle, .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color-primary);
+            font-size: var(--fz-lg);
+            cursor: pointer;
+            padding: 10px;
+            line-height: 1; /* Prevent button height issues */
+            transition: color 0.3s ease;
+        }
+        .theme-toggle:hover, .menu-toggle:hover { color: var(--accent-color); }
+        .menu-toggle { display: none; z-index: 110; } /* Hidden on desktop */
+
+        /* ============================== */
+        /* Search Area                  */
+        /* ============================== */
+        #search-area { text-align: center; padding-top: 100px; padding-bottom: 60px; }
+        #search-area h1 { margin-bottom: 1.5rem; }
+        #search-area p { max-width: 650px; margin-left: auto; margin-right: auto; color: var(--light-slate); }
+        .search-form {
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+            margin: 30px auto 0;
+        }
+        .search-form input { flex-grow: 1; }
+        .search-form .btn { flex-shrink: 0; padding: 0.8rem 1.2rem; } /* Slightly adjust padding */
+
+        /* ============================== */
+        /* Results & Calendar Display   */
+        /* ============================== */
+        #results-display { padding-top: 0; /* Reduce padding after search */ }
+        #results-list {
+            margin-top: 30px;
+            margin-bottom: 40px;
+            max-height: 250px; /* Limit height and allow scroll */
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg);
+            padding: 10px;
+        }
+         /* Style for scrollbar within results list */
+        #results-list::-webkit-scrollbar { width: 6px; }
+        #results-list::-webkit-scrollbar-track { background: transparent; }
+        #results-list::-webkit-scrollbar-thumb { background-color: var(--slate-gray); border-radius: 6px; }
+
+
+        .result-item {
+            display: block; /* Make button take full width */
+            width: 100%;
+            text-align: left;
+            padding: 12px 15px;
+            border: none;
+            background-color: transparent;
+            color: var(--text-color-primary);
+            font-family: var(--font-sans);
+            font-size: var(--fz-md);
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: background-color 0.2s ease, color 0.2s ease;
+            margin-bottom: 5px; /* Spacing between items */
+        }
+        .result-item:last-child { margin-bottom: 0; }
+        .result-item:hover, .result-item:focus, .result-item.selected {
+            background-color: var(--neon-green-tint);
+            color: var(--accent-color);
+            outline: none;
+        }
+        #results-placeholder {
+             text-align: center;
+             padding: 20px;
+             color: var(--text-color-secondary);
+             font-style: italic;
+        }
+
+
+        #selected-calendar-details {
+            margin-top: 40px;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--box-shadow);
+            /* Animation handled by JS adding class */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+         #selected-calendar-details.visible {
+              opacity: 1;
+              transform: translateY(0);
+         }
+
+        #selected-calendar-title {
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        #calendar-embed-container {
+            position: relative;
+            padding-bottom: 75%; /* Aspect ratio 4:3 */
+            height: 0;
+            overflow: hidden;
+            border: 1px solid var(--iframe-border);
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+        #google-calendar-embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .sync-options-detailed {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .sync-button {
+            /* Using .btn styles from base */
+            text-align: center;
+            display: flex; /* Align icon and text */
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Space between icon and text */
+            padding: 0.7rem 1rem; /* Adjust padding */
+        }
+        /* Optional: Specific button styles if needed */
+        /* .google-sync {} */
+        /* .apple-sync {} */
+        /* .outlook-sync {} */
+
+
+        /* ============================== */
+        /* Other Sections (Pricing/Contact) */
+        /* ============================== */
+        #pricing, #contact { text-align: center; }
+        #pricing h2, #contact h2 { margin-bottom: 2rem; }
+        .calendly-inline-widget { /* Placeholder styling */
+            min-width: 320px;
+            height: 700px;
+            margin: 30px auto 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* ============================== */
+        /* Footer                       */
+        /* ============================== */
+        .site-footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+            font-size: var(--fz-xs);
+            color: var(--text-color-secondary);
+        }
+        .site-footer p { margin-bottom: 5px; }
+        .site-footer i { color: var(--accent-color); }
+
+        /* ============================== */
+        /* Scroll Animations            */
+        /* ============================== */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s var(--easing), transform 0.6s var(--easing);
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================== */
+        /* Responsive Design            */
+        /* ============================== */
+        @media (max-width: 768px) {
+            :root {
+                --nav-height: 70px;
+                --section-padding: 60px 0;
+            }
+            .container { --container-padding: 0 15px; }
+            .site-header { padding: 0 15px; }
+            .menu-toggle { display: block; /* Show burger */ }
+            .main-navigation {
+                position: fixed;
+                top: 0;
+                right: -100%; /* Start off-screen */
+                width: min(75vw, 300px);
+                height: 100vh;
+                padding: var(--nav-height) 20px 20px; /* Add padding top */
+                background-color: var(--light-navy); /* Use a theme color */
+                flex-direction: column;
+                justify-content: flex-start; /* Align items top */
+                align-items: stretch; /* Stretch items */
+                box-shadow: -10px 0px 30px -15px rgba(2, 12, 27, 0.7);
+                transition: right 0.4s var(--easing);
+                z-index: 105; /* Below toggle, above content */
+                gap: 0; /* Reset gap for column layout */
+            }
+            .main-navigation.active { right: 0; /* Slide in */ }
+            .nav-menu {
+                flex-direction: column;
+                text-align: center;
+                gap: 5px; /* Spacing between links */
+                width: 100%;
+                 margin-top: 30px; /* Space below header area */
+            }
+            .nav-menu li { width: 100%; }
+            .nav-menu a {
+                display: block; /* Make link fill space */
+                padding: 15px;
+                font-size: var(--fz-lg);
+                color: var(--lightest-slate);
+                border-bottom: 1px solid var(--lightest-navy);
+            }
+            .nav-menu li:last-child a { border-bottom: none; }
+            .main-navigation .theme-toggle {
+                 margin-top: auto; /* Push theme toggle to bottom */
+                 margin-bottom: 20px; /* Space from bottom */
+                 align-self: center; /* Center it */
+                 color: var(--lightest-slate); /* Ensure visibility */
+            }
+
+            .search-form { flex-direction: column; gap: 15px; }
+            #calendar-embed-container { padding-bottom: 100%; /* Adjust aspect ratio for mobile if needed */ }
+            .sync-options-detailed { grid-template-columns: 1fr; /* Stack buttons */ }
+        }
+
+    </style>
+</head>
+<body data-theme="dark"> <header class="site-header">
+        <div class="site-logo">
+            <a href="#">MyCalendar <span>AI</span></a>
+        </div>
+        <nav class="main-navigation" id="main-navigation">
+            <ul class="nav-menu">
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-sun"></i> </button>
+        </nav>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <main>
+        <section id="search-area" class="container animate-on-scroll">
+            <h1>Find Your Shared Calendar Instantly.</h1>
+            <p class="secondary">
+                Enter your city, school name, or postal code to find its shared calendar and easily sync it to your personal agenda.
+            </p>
+            <form class="search-form" id="search-form" role="search">
+                <input type="search" id="search-input" placeholder="E.g., Montreal High, H9R 1A3, Westmount" required aria-label="Search for city or school calendar">
+                <button type="submit" class="btn"><i class="fas fa-search"></i> Search</button>
+            </form>
+        </section>
+
+        <section id="results-display" class="container">
+            <div id="results-list" class="animate-on-scroll">
+                 <p id="results-placeholder">Enter a search term above to find calendars.</p>
+                 </div>
+
+            <div id="selected-calendar-details" style="display: none;">
+                 <h3 id="selected-calendar-title"></h3>
+                 <div id="calendar-embed-container">
+                     <iframe id="google-calendar-embed" src="" style="border: 0" width="800" height="600" frameborder="0" scrolling="no" title="Selected Shared Calendar"></iframe>
+                 </div>
+                 <div class="sync-options-detailed">
+                     <a href="#" id="sync-google" class="btn sync-button google-sync" target="_blank" rel="noopener noreferrer">
+                         <i class="fab fa-google"></i> Add Google
+                     </a>
+                     <a href="#" id="sync-apple" class="btn sync-button apple-sync" download> <i class="fab fa-apple"></i> Sync Apple (.ics)
+                     </a>
+                     <a href="#" id="sync-outlook" class="btn sync-button outlook-sync" download> <i class="fab fa-microsoft"></i> Sync Outlook (.ics)
+                     </a>
+                 </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="container animate-on-scroll">
+            <h2>Simple Pricing</h2>
+            <p>Choose a plan that suits your synchronization needs. Free tier available!</p>
+            <p class="secondary">(Full pricing details coming soon)</p>
+        </section>
+
+        <section id="contact" class="container animate-on-scroll">
+            <h2>Contact Us</h2>
+            <p>Have questions, suggestions, or need help finding a calendar? Get in touch!</p>
+            <a href="mailto:contact@mycalendar.ai" class="btn">Email Us</a>
+        </section>
+
+    </main>
+
+    <footer class="site-footer animate-on-scroll">
+        <div class="container">
+            <p>&copy; <span id="current-year"></span> My Calendar AI. All Rights Reserved.</p>
+            <p>Made with <i class="fas fa-heart"></i> using Vanilla JS</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Element References ---
+            const body = document.body;
+            const header = document.querySelector('.site-header');
+            const navigation = document.getElementById('main-navigation');
+            const menuToggle = document.getElementById('menu-toggle');
+            const themeToggle = document.getElementById('theme-toggle');
+            const searchInput = document.getElementById('search-input');
+            const resultsList = document.getElementById('results-list');
+            const resultsPlaceholder = document.getElementById('results-placeholder');
+            const calendarDetailsContainer = document.getElementById('selected-calendar-details');
+            const calendarTitle = document.getElementById('selected-calendar-title');
+            const calendarEmbed = document.getElementById('google-calendar-embed');
+            const syncGoogleBtn = document.getElementById('sync-google');
+            const syncAppleBtn = document.getElementById('sync-apple');
+            const syncOutlookBtn = document.getElementById('sync-outlook');
+            const currentYearSpan = document.getElementById('current-year');
+
+            // --- Set Current Year ---
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+
+            // --- Calendar Data Source ---
+            // IMPORTANT: Replace with your actual data and Google Calendar embed URLs
+            // Use the SHAREABLE link for embedding, not the private address.
+            // Get embed code: Google Calendar > Settings > Integrate calendar > Embed code
+             // Use webcal:// links for ICS subscriptions if available from Google Calendar settings (Public URL section -> iCal format)
+            const calendarData = {
+                "Montreal High School": {
+                    embedUrl: "https://calendar.google.com/calendar/embed?src=en.canadian%23holiday%40group.v.calendar.google.com&ctz=America%2FMontreal", // Example: Canadian Holidays
+                    icsUrl: "webcal://calendar.google.com/calendar/ical/en.canadian%23holiday%40group.v.calendar.google.com/public/basic.ics",
+                    googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fen.canadian%2523holiday%40group.v.calendar.google.com%2Fpublic%2Fbasic.ics" // Google "Add by URL" intent
+                },
+                "Westmount City Events": {
+                    embedUrl: "https://calendar.google.com/calendar/embed?src=c_schedule%40westmount.org&ctz=America%2FMontreal", // Fictional example
+                    icsUrl: "webcal://example.com/westmount-events.ics", // Placeholder ICS
+                    googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fwestmount-events.ics" // Placeholder Add URL
+                },
+                "Pointe-Claire Library": {
+                    embedUrl: "https://calendar.google.com/calendar/embed?src=c_library%40pointe-claire.ca&ctz=America%2FMontreal", // Fictional example
+                    icsUrl: "webcal://example.com/pcl-library.ics", // Placeholder ICS
+                     googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fpcl-library.ics" // Placeholder Add URL
+                },
+                 "Lester B. Pearson School Board": {
+                     embedUrl: "https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FToronto&src=bGJwY2EuY29tX3JsaXBvanNjdThwZzBkbGlya2JsYWQydWtrQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23AD1457", // Actual LBPSB Calendar (Example)
+                     icsUrl: "webcal://calendar.google.com/calendar/ical/lbpca.com_rlipojscth8pg0dlirkblad2ukk%40group.calendar.google.com/public/basic.ics", // Fictional, get real one if possible
+                     googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Flbpca.com_rlipojscth8pg0dlirkblad2ukk%2540group.calendar.google.com%2Fpublic%2Fbasic.ics" // Fictional
+                 },
+                 // --- Add more calendars here ---
+                "Postal H9R Events": { // Example for postal code
+                    embedUrl: "https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York", // Example: US Holidays
+                    icsUrl: "webcal://calendar.google.com/calendar/ical/en.usa%23holiday%40group.v.calendar.google.com/public/basic.ics",
+                    googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fen.usa%2523holiday%40group.v.calendar.google.com%2Fpublic%2Fbasic.ics"
+                }
+            };
+
+            // --- Theme Management ---
+            const applyTheme = (theme) => {
+                body.dataset.theme = theme;
+                if (themeToggle) {
+                    themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                }
+                localStorage.setItem('theme', theme);
+                // Optional: Add Calendly theme sync call here if implemented
+                // updateCalendlyTheme(theme);
+            };
+
+            const currentTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            applyTheme(currentTheme);
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const newTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+                    applyTheme(newTheme);
+                });
+            }
+
+            // --- Mobile Navigation Toggle ---
+            if (menuToggle && navigation) {
+                menuToggle.addEventListener('click', () => {
+                    const isActive = navigation.classList.toggle('active');
+                    menuToggle.setAttribute('aria-expanded', isActive);
+                    menuToggle.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                });
+
+                // Close nav on link click (optional)
+                navigation.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (navigation.classList.contains('active')) {
+                            navigation.classList.remove('active');
+                            menuToggle.setAttribute('aria-expanded', 'false');
+                            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                        }
+                    });
+                });
+            }
+
+            // --- Search Filtering and Display ---
+            const displayResults = (query) => {
+                resultsList.innerHTML = ''; // Clear previous results
+                calendarDetailsContainer.style.display = 'none'; // Hide details view
+                 calendarDetailsContainer.classList.remove('visible');
+                const lowerCaseQuery = query.toLowerCase().trim();
+                let hasResults = false;
+
+                if (lowerCaseQuery === '') {
+                     resultsPlaceholder.textContent = 'Enter a search term above to find calendars.';
+                     resultsPlaceholder.style.display = 'block';
+                     return;
+                 }
+
+                const allKeys = Object.keys(calendarData);
+                const filteredKeys = allKeys.filter(key => key.toLowerCase().includes(lowerCaseQuery));
+
+                if (filteredKeys.length > 0) {
+                    resultsPlaceholder.style.display = 'none';
+                    filteredKeys.forEach(key => {
+                        const data = calendarData[key];
+                        if (data && data.embedUrl) { // Ensure data exists
+                            const button = document.createElement('button');
+                            button.classList.add('result-item');
+                            button.textContent = key;
+                            button.dataset.key = key; // Store key to retrieve data on click
+                            resultsList.appendChild(button);
+                            hasResults = true;
+                        }
+                    });
+                }
+
+                 if (!hasResults) {
+                     resultsPlaceholder.textContent = `No calendars found matching "${query}".`;
+                     resultsPlaceholder.style.display = 'block';
+                 }
+            };
+
+            const displaySelectedCalendar = (key) => {
+                const data = calendarData[key];
+                if (!data) return;
+
+                calendarTitle.textContent = key;
+                calendarEmbed.src = data.embedUrl;
+                calendarEmbed.title = `${key} Shared Calendar`; // Accessibility
+
+                // Update sync button links
+                syncGoogleBtn.href = data.googleAddUrl || '#'; // Link to Google Add URL if exists
+                syncAppleBtn.href = data.icsUrl || '#';       // Link to ICS for Apple/Outlook
+                syncOutlookBtn.href = data.icsUrl || '#';
+
+                 // Set download attribute filename (optional, but good practice for .ics)
+                const filename = `${key.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
+                syncAppleBtn.setAttribute('download', data.icsUrl ? filename : '');
+                syncOutlookBtn.setAttribute('download', data.icsUrl ? filename : '');
+
+
+                calendarDetailsContainer.style.display = 'block';
+                 // Use setTimeout to allow the display:block to render before animating
+                 setTimeout(() => {
+                     calendarDetailsContainer.classList.add('visible');
+                     // Scroll into view smoothly
+                     calendarDetailsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                 }, 50); // Small delay
+
+                 // Highlight selected item (optional)
+                 resultsList.querySelectorAll('.result-item').forEach(item => {
+                     item.classList.toggle('selected', item.dataset.key === key);
+                 });
+
+            };
+
+            if (searchInput) {
+                // Trigger search on input change (debounced slightly) or form submit
+                let debounceTimer;
+                searchInput.addEventListener('input', () => {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                         displayResults(searchInput.value);
+                    }, 300); // 300ms debounce
+                });
+
+                 // Also handle form submission (e.g., Enter key)
+                 document.getElementById('search-form').addEventListener('submit', (e) => {
+                     e.preventDefault();
+                     clearTimeout(debounceTimer); // Clear debounce if submitting
+                     displayResults(searchInput.value);
+                 });
+            }
+
+            // Event delegation for clicking on results
+            if (resultsList) {
+                resultsList.addEventListener('click', (e) => {
+                    const targetButton = e.target.closest('.result-item');
+                    if (targetButton && targetButton.dataset.key) {
+                        displaySelectedCalendar(targetButton.dataset.key);
+                    }
+                });
+            }
+
+            // --- Scroll Animations ---
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // observer.unobserve(entry.target); // Optional: Animate only once
+                    } else {
+                         // Optional: Remove class to re-animate if scrolling up
+                         // entry.target.classList.remove('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 }); // Adjust threshold as needed (0.1 = 10% visible)
+
+            animatedElements.forEach(el => observer.observe(el));
+
+            // --- Calendly Theme Sync (Placeholder Function) ---
+            // function updateCalendlyTheme(theme) {
+            //     const calendlyWidget = document.querySelector('.calendly-inline-widget iframe');
+            //     if (!calendlyWidget) return;
+            //     let url = new URL(calendlyWidget.src);
+            //     if (theme === 'dark') {
+            //         url.searchParams.set('background_color', '0a192f');
+            //         url.searchParams.set('text_color', 'ccd6f6');
+            //         url.searchParams.set('primary_color', '64ffda');
+            //     } else {
+            //         url.searchParams.set('background_color', 'f4f7fc');
+            //         url.searchParams.set('text_color', '333333');
+            //         url.searchParams.set('primary_color', '3182ce');
+            //     }
+            //     calendlyWidget.src = url.toString();
+            //     console.log("Attempting to update Calendly theme to:", theme);
+            // }
+            // --- Note: Dynamically changing iframe src might reload it. Test thoroughly if using Calendly. ---
+
+        }); // End DOMContentLoaded
+    </script>
+
+</body>
+</html>
