@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Calendar AI | Find & Sync Shared Calendars</title>
-    <meta name="description" content="My Calendar AI helps you easily find your city or school's shared calendar and sync it with your Google, Apple, or Outlook calendar.">
-    <meta name="keywords" content="shared calendar, city calendar, school calendar, sync calendar, google calendar, apple calendar, outlook calendar, embed calendar, AI">
+    <meta name="description"
+        content="My Calendar AI helps you easily find your city or school's shared calendar and sync it with your Google, Apple, or Outlook calendar.">
+    <meta name="keywords"
+        content="shared calendar, city calendar, school calendar, sync calendar, google calendar, apple calendar, outlook calendar, embed calendar, AI">
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         /* ============================== */
@@ -45,7 +51,8 @@
             --fz-xl: 20px;
             --fz-xxl: 24px;
             --fz-heading: 32px;
-            --fz-hero-heading: clamp(40px, 8vw, 60px); /* Responsive heading */
+            --fz-hero-heading: clamp(40px, 8vw, 60px);
+            /* Responsive heading */
 
             /* Layout & Spacing */
             --border-radius: 4px;
@@ -67,35 +74,64 @@
             --card-bg: var(--light-navy);
             --border-color: var(--lightest-navy);
             --button-text-color: var(--navy-blue);
-            --header-bg: rgba(10, 25, 47, 0.85); /* Semi-transparent header */
+            --header-bg: rgba(10, 25, 47, 0.85);
+            /* Semi-transparent header */
             --box-shadow: rgba(2, 12, 27, 0.7) 0px 10px 30px -15px;
             --iframe-border: var(--lightest-navy);
         }
 
         /* Light Theme */
         [data-theme="light"] {
-            --bg-color: #f4f7fc; /* Light grayish blue */
+            --bg-color: #f4f7fc;
+            /* Light grayish blue */
             --text-color-primary: #333;
             --text-color-secondary: #555;
-            --heading-color: #1a202c; /* Darker heading */
-            --accent-color: #3182ce; /* Adjusted blue accent for light */
+            --heading-color: #1a202c;
+            /* Darker heading */
+            --accent-color: #3182ce;
+            /* Adjusted blue accent for light */
             --card-bg: var(--white);
-            --border-color: #e2e8f0; /* Light gray border */
+            --border-color: #e2e8f0;
+            /* Light gray border */
             --button-text-color: var(--white);
             --header-bg: rgba(255, 255, 255, 0.9);
             --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --navy-blue: #0a192f; /* Keep original names accessible */
-            --neon-green: var(--accent-color); /* Map neon green var to new accent */
+            --navy-blue: #0a192f;
+            /* Keep original names accessible */
+            --neon-green: var(--accent-color);
+            /* Map neon green var to new accent */
             --neon-green-tint: rgba(49, 130, 206, 0.1);
             --iframe-border: #ccc;
         }
 
         /* Global Resets & Base Styles */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--slate-gray) var(--navy-blue); }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background-color: var(--slate-gray); border-radius: 10px; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--slate-gray) var(--navy-blue);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--slate-gray);
+            border-radius: 10px;
+        }
+
         body {
             font-family: var(--font-sans);
             font-size: var(--fz-md);
@@ -106,8 +142,16 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        main { padding-top: var(--nav-height); } /* Space for fixed header */
-        section { padding: var(--section-padding); }
+
+        main {
+            padding-top: var(--nav-height);
+        }
+
+        /* Space for fixed header */
+        section {
+            padding: var(--section-padding);
+        }
+
         .container {
             max-width: var(--max-width);
             margin: 0 auto;
@@ -115,47 +159,90 @@
         }
 
         /* Headings & Text */
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: var(--font-headings);
             color: var(--heading-color);
             margin-bottom: 1rem;
             font-weight: 700;
             line-height: 1.3;
         }
-        h1 { font-size: var(--fz-hero-heading); }
-        h2 { font-size: var(--fz-heading); }
-        h3 { font-size: var(--fz-xxl); }
-        p { margin-bottom: 1.5rem; color: var(--text-color-primary); }
-        p.secondary { color: var(--text-color-secondary); font-size: var(--fz-sm); }
-        a { color: var(--accent-color); text-decoration: none; transition: var(--transition); }
-        a:hover, a:focus { opacity: 0.8; text-decoration: underline; text-decoration-color: var(--accent-color); }
+
+        h1 {
+            font-size: var(--fz-hero-heading);
+        }
+
+        h2 {
+            font-size: var(--fz-heading);
+        }
+
+        h3 {
+            font-size: var(--fz-xxl);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-color-primary);
+        }
+
+        p.secondary {
+            color: var(--text-color-secondary);
+            font-size: var(--fz-sm);
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover,
+        a:focus {
+            opacity: 0.8;
+            text-decoration: underline;
+            text-decoration-color: var(--accent-color);
+        }
 
         /* Buttons */
         .btn {
-            display: inline-block; /* Allows margin/padding */
+            display: inline-block;
+            /* Allows margin/padding */
             cursor: pointer;
             border: 1px solid var(--accent-color);
             border-radius: var(--border-radius);
             padding: 0.8rem 1.75rem;
             background-color: var(--accent-color);
             color: var(--button-text-color);
-            font-family: var(--font-headings); /* Use heading font for buttons */
+            font-family: var(--font-headings);
+            /* Use heading font for buttons */
             font-size: var(--fz-sm);
             font-weight: 600;
             transition: var(--transition);
             text-align: center;
-            text-decoration: none; /* For <a> elements styled as buttons */
+            text-decoration: none;
+            /* For <a> elements styled as buttons */
         }
-        .btn:hover, .btn:focus {
+
+        .btn:hover,
+        .btn:focus {
             background-color: transparent;
             color: var(--accent-color);
             outline: none;
-            box-shadow: 0 0 0 2px var(--accent-color); /* Focus indicator */
+            box-shadow: 0 0 0 2px var(--accent-color);
+            /* Focus indicator */
         }
-        .btn i { margin-right: 8px; }
+
+        .btn i {
+            margin-right: 8px;
+        }
 
         /* Forms */
-        input[type="search"], input[type="text"] {
+        input[type="search"],
+        input[type="text"] {
             padding: 0.8rem 1rem;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
@@ -165,7 +252,9 @@
             width: 100%;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        input[type="search"]:focus, input[type="text"]:focus {
+
+        input[type="search"]:focus,
+        input[type="text"]:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px var(--neon-green-tint);
@@ -190,6 +279,7 @@
             z-index: 100;
             transition: height 0.3s ease, background-color 0.3s ease;
         }
+
         .site-logo a {
             font-family: var(--font-headings);
             font-size: var(--fz-xl);
@@ -197,9 +287,23 @@
             color: var(--heading-color);
             text-decoration: none;
         }
-        .site-logo span { color: var(--accent-color); }
-        .main-navigation { display: flex; align-items: center; gap: 15px; }
-        .nav-menu { display: flex; gap: 20px; list-style: none; }
+
+        .site-logo span {
+            color: var(--accent-color);
+        }
+
+        .main-navigation {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
         .nav-menu a {
             font-family: var(--font-headings);
             font-size: var(--fz-sm);
@@ -207,58 +311,115 @@
             padding: 10px;
             text-decoration: none;
         }
-        .nav-menu a:hover, .nav-menu a.active { color: var(--accent-color); text-decoration: none; }
 
-        .theme-toggle, .menu-toggle {
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .theme-toggle,
+        .menu-toggle {
             background: none;
             border: none;
             color: var(--text-color-primary);
             font-size: var(--fz-lg);
             cursor: pointer;
             padding: 10px;
-            line-height: 1; /* Prevent button height issues */
+            line-height: 1;
+            /* Prevent button height issues */
             transition: color 0.3s ease;
         }
-        .theme-toggle:hover, .menu-toggle:hover { color: var(--accent-color); }
-        .menu-toggle { display: none; z-index: 110; } /* Hidden on desktop */
+
+        .theme-toggle:hover,
+        .menu-toggle:hover {
+            color: var(--accent-color);
+        }
+
+        .menu-toggle {
+            display: none;
+            z-index: 110;
+        }
+
+        /* Hidden on desktop */
 
         /* ============================== */
         /* Search Area                  */
         /* ============================== */
-        #search-area { text-align: center; padding-top: 100px; padding-bottom: 60px; }
-        #search-area h1 { margin-bottom: 1.5rem; }
-        #search-area p { max-width: 650px; margin-left: auto; margin-right: auto; color: var(--light-slate); }
+        #search-area {
+            text-align: center;
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+
+        #search-area h1 {
+            margin-bottom: 1.5rem;
+        }
+
+        #search-area p {
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--light-slate);
+        }
+
         .search-form {
             display: flex;
             gap: 10px;
             max-width: 600px;
             margin: 30px auto 0;
         }
-        .search-form input { flex-grow: 1; }
-        .search-form .btn { flex-shrink: 0; padding: 0.8rem 1.2rem; } /* Slightly adjust padding */
+
+        .search-form input {
+            flex-grow: 1;
+        }
+
+        .search-form .btn {
+            flex-shrink: 0;
+            padding: 0.8rem 1.2rem;
+        }
+
+        /* Slightly adjust padding */
 
         /* ============================== */
         /* Results & Calendar Display   */
         /* ============================== */
-        #results-display { padding-top: 0; /* Reduce padding after search */ }
+        #results-display {
+            padding-top: 0;
+            /* Reduce padding after search */
+        }
+
+        /* Style the results list container */
         #results-list {
             margin-top: 30px;
             margin-bottom: 40px;
-            max-height: 250px; /* Limit height and allow scroll */
+            max-height: 250px;
+            /* Limit height and allow scroll */
             overflow-y: auto;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             background-color: var(--card-bg);
             padding: 10px;
         }
-         /* Style for scrollbar within results list */
-        #results-list::-webkit-scrollbar { width: 6px; }
-        #results-list::-webkit-scrollbar-track { background: transparent; }
-        #results-list::-webkit-scrollbar-thumb { background-color: var(--slate-gray); border-radius: 6px; }
 
+        /* Style for scrollbar within results list */
+        #results-list::-webkit-scrollbar {
+            width: 6px;
+        }
 
+        #results-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #results-list::-webkit-scrollbar-thumb {
+            background-color: var(--slate-gray);
+            border-radius: 6px;
+        }
+
+        /* Style individual result items (buttons) */
         .result-item {
-            display: block; /* Make button take full width */
+            display: block;
+            /* Make button take full width */
             width: 100%;
             text-align: left;
             padding: 12px 15px;
@@ -270,22 +431,31 @@
             cursor: pointer;
             border-radius: var(--border-radius);
             transition: background-color 0.2s ease, color 0.2s ease;
-            margin-bottom: 5px; /* Spacing between items */
+            margin-bottom: 5px;
+            /* Spacing between items */
         }
-        .result-item:last-child { margin-bottom: 0; }
-        .result-item:hover, .result-item:focus, .result-item.selected {
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-item:hover,
+        .result-item:focus,
+        .result-item.selected {
             background-color: var(--neon-green-tint);
             color: var(--accent-color);
             outline: none;
         }
+
+        /* Style the placeholder message inside the results list */
         #results-placeholder {
-             text-align: center;
-             padding: 20px;
-             color: var(--text-color-secondary);
-             font-style: italic;
+            text-align: center;
+            padding: 20px;
+            color: var(--text-color-secondary);
+            font-style: italic;
         }
 
-
+        /* Style the container for the selected calendar details */
         #selected-calendar-details {
             margin-top: 40px;
             background-color: var(--card-bg);
@@ -298,25 +468,30 @@
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
-         #selected-calendar-details.visible {
-              opacity: 1;
-              transform: translateY(0);
-         }
+
+        #selected-calendar-details.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         #selected-calendar-title {
             color: var(--accent-color);
             text-align: center;
             margin-bottom: 25px;
         }
+
+        /* Style the iframe container for aspect ratio */
         #calendar-embed-container {
             position: relative;
-            padding-bottom: 75%; /* Aspect ratio 4:3 */
+            padding-bottom: 75%;
+            /* Aspect ratio 4:3 */
             height: 0;
             overflow: hidden;
             border: 1px solid var(--iframe-border);
             border-radius: var(--border-radius);
             margin-bottom: 30px;
         }
+
         #google-calendar-embed {
             position: absolute;
             top: 0;
@@ -325,6 +500,8 @@
             height: 100%;
             border: 0;
         }
+
+        /* Style the sync buttons below the iframe */
         .sync-options-detailed {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -333,27 +510,36 @@
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
         }
+
         .sync-button {
             /* Using .btn styles from base */
             text-align: center;
-            display: flex; /* Align icon and text */
+            display: flex;
+            /* Align icon and text */
             align-items: center;
             justify-content: center;
-            gap: 8px; /* Space between icon and text */
-            padding: 0.7rem 1rem; /* Adjust padding */
+            gap: 8px;
+            /* Space between icon and text */
+            padding: 0.7rem 1rem;
+            /* Adjust padding */
         }
-        /* Optional: Specific button styles if needed */
-        /* .google-sync {} */
-        /* .apple-sync {} */
-        /* .outlook-sync {} */
 
 
         /* ============================== */
         /* Other Sections (Pricing/Contact) */
         /* ============================== */
-        #pricing, #contact { text-align: center; }
-        #pricing h2, #contact h2 { margin-bottom: 2rem; }
-        .calendly-inline-widget { /* Placeholder styling */
+        #pricing,
+        #contact {
+            text-align: center;
+        }
+
+        #pricing h2,
+        #contact h2 {
+            margin-bottom: 2rem;
+        }
+
+        .calendly-inline-widget {
+            /* Placeholder styling */
             min-width: 320px;
             height: 700px;
             margin: 30px auto 0;
@@ -373,8 +559,14 @@
             font-size: var(--fz-xs);
             color: var(--text-color-secondary);
         }
-        .site-footer p { margin-bottom: 5px; }
-        .site-footer i { color: var(--accent-color); }
+
+        .site-footer p {
+            margin-bottom: 5px;
+        }
+
+        .site-footer i {
+            color: var(--accent-color);
+        }
 
         /* ============================== */
         /* Scroll Animations            */
@@ -384,6 +576,7 @@
             transform: translateY(30px);
             transition: opacity 0.6s var(--easing), transform 0.6s var(--easing);
         }
+
         .animate-on-scroll.is-visible {
             opacity: 1;
             transform: translateY(0);
@@ -397,57 +590,107 @@
                 --nav-height: 70px;
                 --section-padding: 60px 0;
             }
-            .container { --container-padding: 0 15px; }
-            .site-header { padding: 0 15px; }
-            .menu-toggle { display: block; /* Show burger */ }
+
+            .container {
+                --container-padding: 0 15px;
+            }
+
+            .site-header {
+                padding: 0 15px;
+            }
+
+            .menu-toggle {
+                display: block;
+                /* Show burger */
+            }
+
             .main-navigation {
                 position: fixed;
                 top: 0;
-                right: -100%; /* Start off-screen */
+                right: -100%;
+                /* Start off-screen */
                 width: min(75vw, 300px);
                 height: 100vh;
-                padding: var(--nav-height) 20px 20px; /* Add padding top */
-                background-color: var(--light-navy); /* Use a theme color */
+                padding: var(--nav-height) 20px 20px;
+                /* Add padding top */
+                background-color: var(--light-navy);
+                /* Use a theme color */
                 flex-direction: column;
-                justify-content: flex-start; /* Align items top */
-                align-items: stretch; /* Stretch items */
+                justify-content: flex-start;
+                /* Align items top */
+                align-items: stretch;
+                /* Stretch items */
                 box-shadow: -10px 0px 30px -15px rgba(2, 12, 27, 0.7);
                 transition: right 0.4s var(--easing);
-                z-index: 105; /* Below toggle, above content */
-                gap: 0; /* Reset gap for column layout */
+                z-index: 105;
+                /* Below toggle, above content */
+                gap: 0;
+                /* Reset gap for column layout */
             }
-            .main-navigation.active { right: 0; /* Slide in */ }
+
+            .main-navigation.active {
+                right: 0;
+                /* Slide in */
+            }
+
             .nav-menu {
                 flex-direction: column;
                 text-align: center;
-                gap: 5px; /* Spacing between links */
+                gap: 5px;
+                /* Spacing between links */
                 width: 100%;
-                 margin-top: 30px; /* Space below header area */
+                margin-top: 30px;
+                /* Space below header area */
             }
-            .nav-menu li { width: 100%; }
+
+            .nav-menu li {
+                width: 100%;
+            }
+
             .nav-menu a {
-                display: block; /* Make link fill space */
+                display: block;
+                /* Make link fill space */
                 padding: 15px;
                 font-size: var(--fz-lg);
                 color: var(--lightest-slate);
                 border-bottom: 1px solid var(--lightest-navy);
             }
-            .nav-menu li:last-child a { border-bottom: none; }
-            .main-navigation .theme-toggle {
-                 margin-top: auto; /* Push theme toggle to bottom */
-                 margin-bottom: 20px; /* Space from bottom */
-                 align-self: center; /* Center it */
-                 color: var(--lightest-slate); /* Ensure visibility */
+
+            .nav-menu li:last-child a {
+                border-bottom: none;
             }
 
-            .search-form { flex-direction: column; gap: 15px; }
-            #calendar-embed-container { padding-bottom: 100%; /* Adjust aspect ratio for mobile if needed */ }
-            .sync-options-detailed { grid-template-columns: 1fr; /* Stack buttons */ }
-        }
+            .main-navigation .theme-toggle {
+                margin-top: auto;
+                /* Push theme toggle to bottom */
+                margin-bottom: 20px;
+                /* Space from bottom */
+                align-self: center;
+                /* Center it */
+                color: var(--lightest-slate);
+                /* Ensure visibility */
+            }
 
+            .search-form {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            #calendar-embed-container {
+                padding-bottom: 100%;
+                /* Adjust aspect ratio for mobile if needed */
+            }
+
+            .sync-options-detailed {
+                grid-template-columns: 1fr;
+                /* Stack buttons */
+            }
+        }
     </style>
 </head>
-<body data-theme="dark"> <header class="site-header">
+
+<body data-theme="dark">
+    <header class="site-header">
         <div class="site-logo">
             <a href="#">MyCalendar <span>AI</span></a>
         </div>
@@ -468,33 +711,39 @@
         <section id="search-area" class="container animate-on-scroll">
             <h1>Find Your Shared Calendar Instantly.</h1>
             <p class="secondary">
-                Enter your city, school name, or postal code to find its shared calendar and easily sync it to your personal agenda.
+                Enter your city, school name, or postal code to find its shared calendar and easily sync it to your
+                personal agenda.
             </p>
             <form class="search-form" id="search-form" role="search">
-                <input type="search" id="search-input" placeholder="E.g., Montreal High, H9R 1A3, Westmount" required aria-label="Search for city or school calendar">
+                <input type="search" id="search-input" placeholder="E.g., College St Louis, H9R 1A3, Westmount" required
+                    aria-label="Search for city or school calendar">
                 <button type="submit" class="btn"><i class="fas fa-search"></i> Search</button>
             </form>
         </section>
 
         <section id="results-display" class="container">
             <div id="results-list" class="animate-on-scroll">
-                 <p id="results-placeholder">Enter a search term above to find calendars.</p>
-                 </div>
+                <p id="results-placeholder">Enter a search term above to find calendars.</p>
+            </div>
 
             <div id="selected-calendar-details" style="display: none;">
-                 <h3 id="selected-calendar-title"></h3>
-                 <div id="calendar-embed-container">
-                     <iframe id="google-calendar-embed" src="" style="border: 0" width="800" height="600" frameborder="0" scrolling="no" title="Selected Shared Calendar"></iframe>
-                 </div>
-                 <div class="sync-options-detailed">
-                     <a href="#" id="sync-google" class="btn sync-button google-sync" target="_blank" rel="noopener noreferrer">
-                         <i class="fab fa-google"></i> Add Google
-                     </a>
-                     <a href="#" id="sync-apple" class="btn sync-button apple-sync" download> <i class="fab fa-apple"></i> Sync Apple (.ics)
-                     </a>
-                     <a href="#" id="sync-outlook" class="btn sync-button outlook-sync" download> <i class="fab fa-microsoft"></i> Sync Outlook (.ics)
-                     </a>
-                 </div>
+                <h3 id="selected-calendar-title"></h3>
+                <div id="calendar-embed-container">
+                    <iframe id="google-calendar-embed" src="" style="border: 0" width="800" height="600" frameborder="0"
+                        scrolling="no" title="Selected Shared Calendar"></iframe>
+                </div>
+                <div class="sync-options-detailed">
+                    <a href="#" id="sync-google" class="btn sync-button google-sync" target="_blank"
+                        rel="noopener noreferrer">
+                        <i class="fab fa-google"></i> Add Google
+                    </a>
+                    <a href="#" id="sync-apple" class="btn sync-button apple-sync" download> <i
+                            class="fab fa-apple"></i> Sync Apple (.ics)
+                    </a>
+                    <a href="#" id="sync-outlook" class="btn sync-button outlook-sync" download> <i
+                            class="fab fa-microsoft"></i> Sync Outlook (.ics)
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -520,6 +769,39 @@
     </footer>
 
     <script>
+        // Assume calendarData is loaded from data.js or defined below
+        // Make sure data.js is loaded BEFORE this script if using separate file
+        const calendarData = {
+            "College St Louis": {
+                embedUrl: "https://calendar.google.com/calendar/embed?src=402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%40group.calendar.google.com&ctz=America%2FToronto", // CORRECT Embed URL using CID
+                icsUrl: "https://calendar.google.com/calendar/ical/402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%40group.calendar.google.com/public/basic.ics", // Public iCal download URL
+                // Correct Google Add URL requires URL encoding the icsUrl:
+                googleAddUrl: "https://calendar.google.com/calendar/r?cid=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2F402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%2540group.calendar.google.com%2Fpublic%2Fbasic.ics"
+            },
+            "Westmount City Events": {
+                embedUrl: "https://calendar.google.com/calendar/embed?src=c_schedule%40westmount.org&ctz=America%2FMontreal", // Fictional example
+                icsUrl: "webcal://example.com/westmount-events.ics", // Placeholder ICS - CORRECTED
+                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fwestmount-events.ics" // Placeholder Add URL
+            },
+            "Pointe-Claire Library": {
+                embedUrl: "https://calendar.google.com/calendar/embed?src=c_library%40pointe-claire.ca&ctz=America%2FMontreal", // Fictional example
+                icsUrl: "webcal://example.com/pcl-library.ics", // Placeholder ICS
+                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fpcl-library.ics" // Placeholder Add URL
+            },
+            "Lester B. Pearson School Board": {
+                embedUrl: "https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FToronto&src=bGJwY2EuY29tX3JsaXBvanNjdThwZzBkbGlya2JsYWQydWtrQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23AD1457", // Actual LBPSB Calendar (Example)
+                icsUrl: "webcal://calendar.google.com/calendar/ical/lbpca.com_rlipojscth8pg0dlirkblad2ukk%40group.calendar.google.com/public/basic.ics", // Fictional, get real one if possible
+                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Flbpca.com_rlipojscth8pg0dlirkblad2ukk%2540group.calendar.google.com%2Fpublic%2Fbasic.ics" // Fictional
+            },
+            // --- Add more calendars here ---
+            "Postal H9R Events": { // Example for postal code
+                embedUrl: "https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York", // Example: US Holidays
+                icsUrl: "webcal://calendar.google.com/calendar/ical/en.usa%23holiday%40group.v.calendar.google.com/public/basic.ics",
+                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fen.usa%2523holiday%40group.v.calendar.google.com%2Fpublic%2Fbasic.ics"
+            }
+        };
+
+
         document.addEventListener('DOMContentLoaded', () => {
             // --- Element References ---
             const body = document.body;
@@ -528,7 +810,7 @@
             const menuToggle = document.getElementById('menu-toggle');
             const themeToggle = document.getElementById('theme-toggle');
             const searchInput = document.getElementById('search-input');
-            const resultsList = document.getElementById('results-list');
+            const resultsList = document.getElementById('results-list'); // Reference needed for clearing/showing buttons
             const resultsPlaceholder = document.getElementById('results-placeholder');
             const calendarDetailsContainer = document.getElementById('selected-calendar-details');
             const calendarTitle = document.getElementById('selected-calendar-title');
@@ -543,40 +825,6 @@
                 currentYearSpan.textContent = new Date().getFullYear();
             }
 
-            // --- Calendar Data Source ---
-            // IMPORTANT: Replace with your actual data and Google Calendar embed URLs
-            // Use the SHAREABLE link for embedding, not the private address.
-            // Get embed code: Google Calendar > Settings > Integrate calendar > Embed code
-             // Use webcal:// links for ICS subscriptions if available from Google Calendar settings (Public URL section -> iCal format)
-            const calendarData = {
-                "Montreal High School": {
-                    embedUrl: "https://calendar.google.com/calendar/embed?src=en.canadian%23holiday%40group.v.calendar.google.com&ctz=America%2FMontreal", // Example: Canadian Holidays
-                    icsUrl: "webcal://calendar.google.com/calendar/ical/en.canadian%23holiday%40group.v.calendar.google.com/public/basic.ics",
-                    googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fen.canadian%2523holiday%40group.v.calendar.google.com%2Fpublic%2Fbasic.ics" // Google "Add by URL" intent
-                },
-                "Westmount City Events": {
-                    embedUrl: "https://calendar.google.com/calendar/embed?src=c_schedule%40westmount.org&ctz=America%2FMontreal", // Fictional example
-                    icsUrl: "webcal://example.com/westmount-events.ics", // Placeholder ICS
-                    googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fwestmount-events.ics" // Placeholder Add URL
-                },
-                "Pointe-Claire Library": {
-                    embedUrl: "https://calendar.google.com/calendar/embed?src=c_library%40pointe-claire.ca&ctz=America%2FMontreal", // Fictional example
-                    icsUrl: "webcal://example.com/pcl-library.ics", // Placeholder ICS
-                     googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fpcl-library.ics" // Placeholder Add URL
-                },
-                 "Lester B. Pearson School Board": {
-                     embedUrl: "https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FToronto&src=bGJwY2EuY29tX3JsaXBvanNjdThwZzBkbGlya2JsYWQydWtrQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23AD1457", // Actual LBPSB Calendar (Example)
-                     icsUrl: "webcal://calendar.google.com/calendar/ical/lbpca.com_rlipojscth8pg0dlirkblad2ukk%40group.calendar.google.com/public/basic.ics", // Fictional, get real one if possible
-                     googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Flbpca.com_rlipojscth8pg0dlirkblad2ukk%2540group.calendar.google.com%2Fpublic%2Fbasic.ics" // Fictional
-                 },
-                 // --- Add more calendars here ---
-                "Postal H9R Events": { // Example for postal code
-                    embedUrl: "https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York", // Example: US Holidays
-                    icsUrl: "webcal://calendar.google.com/calendar/ical/en.usa%23holiday%40group.v.calendar.google.com/public/basic.ics",
-                    googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fen.usa%2523holiday%40group.v.calendar.google.com%2Fpublic%2Fbasic.ics"
-                }
-            };
-
             // --- Theme Management ---
             const applyTheme = (theme) => {
                 body.dataset.theme = theme;
@@ -584,13 +832,10 @@
                     themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
                 }
                 localStorage.setItem('theme', theme);
-                // Optional: Add Calendly theme sync call here if implemented
-                // updateCalendlyTheme(theme);
+                // updateCalendlyTheme(theme); // Optional
             };
-
-            const currentTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+            const currentTheme = localStorage.getItem('theme') || 'dark';
             applyTheme(currentTheme);
-
             if (themeToggle) {
                 themeToggle.addEventListener('click', () => {
                     const newTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -605,8 +850,6 @@
                     menuToggle.setAttribute('aria-expanded', isActive);
                     menuToggle.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
                 });
-
-                // Close nav on link click (optional)
                 navigation.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         if (navigation.classList.contains('active')) {
@@ -618,24 +861,28 @@
                 });
             }
 
-            // --- Search Filtering and Display ---
+            // --- Search Filtering and Display (List-Based) ---
             const displayResults = (query) => {
-                resultsList.innerHTML = ''; // Clear previous results
-                calendarDetailsContainer.style.display = 'none'; // Hide details view
-                 calendarDetailsContainer.classList.remove('visible');
+                // Clear previous results/state
+                resultsList.innerHTML = '';
+                calendarDetailsContainer.style.display = 'none';
+                calendarDetailsContainer.classList.remove('visible');
+                resultsPlaceholder.style.display = 'none'; // Hide placeholder initially
+
                 const lowerCaseQuery = query.toLowerCase().trim();
                 let hasResults = false;
 
                 if (lowerCaseQuery === '') {
-                     resultsPlaceholder.textContent = 'Enter a search term above to find calendars.';
-                     resultsPlaceholder.style.display = 'block';
-                     return;
-                 }
+                    resultsPlaceholder.textContent = 'Enter a search term above to find calendars.';
+                    resultsPlaceholder.style.display = 'block';
+                    return;
+                }
 
                 const allKeys = Object.keys(calendarData);
                 const filteredKeys = allKeys.filter(key => key.toLowerCase().includes(lowerCaseQuery));
 
                 if (filteredKeys.length > 0) {
+                    // Hide placeholder only if results are found
                     resultsPlaceholder.style.display = 'none';
                     filteredKeys.forEach(key => {
                         const data = calendarData[key];
@@ -647,76 +894,116 @@
                             resultsList.appendChild(button);
                             hasResults = true;
                         }
-                    });
+                    }); // <-- Missing closing brace added here
+                } // <-- Missing closing brace added here
+
+
+                // Show placeholder only if no results were found AND query was not empty
+                if (!hasResults && lowerCaseQuery !== '') {
+                    resultsPlaceholder.textContent = `No calendars found matching "${query}".`;
+                    resultsPlaceholder.style.display = 'block';
                 }
+            }; // <-- Missing closing brace added here
 
-                 if (!hasResults) {
-                     resultsPlaceholder.textContent = `No calendars found matching "${query}".`;
-                     resultsPlaceholder.style.display = 'block';
-                 }
-            };
 
+            // --- Function to Display the Calendar Details ---
             const displaySelectedCalendar = (key) => {
                 const data = calendarData[key];
-                if (!data) return;
+                if (!data || !data.embedUrl) {
+                    console.error(`Data or embedUrl missing for key: ${key}`);
+                    if (resultsPlaceholder) { // Show error in placeholder
+                        resultsPlaceholder.textContent = `Could not load calendar data for "${key}".`;
+                        resultsPlaceholder.style.display = 'block';
+                    }
+                    calendarDetailsContainer.style.display = 'none'; // Ensure details stay hidden
+                    calendarDetailsContainer.classList.remove('visible');
+                    resultsList.innerHTML = ''; // Clear results list too
+                    return;
+                }
 
-                calendarTitle.textContent = key;
-                calendarEmbed.src = data.embedUrl;
-                calendarEmbed.title = `${key} Shared Calendar`; // Accessibility
+                // Clear results list and hide placeholder when showing details
+                resultsList.innerHTML = '';
+                resultsPlaceholder.style.display = 'none';
+
+
+                // Set the title above the calendar
+                if (calendarTitle) calendarTitle.textContent = key;
+
+                // Set the iframe source
+                if (calendarEmbed) {
+                    calendarEmbed.src = data.embedUrl;
+                    calendarEmbed.title = `${key} Shared Calendar`; // For accessibility
+                }
 
                 // Update sync button links
-                syncGoogleBtn.href = data.googleAddUrl || '#'; // Link to Google Add URL if exists
-                syncAppleBtn.href = data.icsUrl || '#';       // Link to ICS for Apple/Outlook
-                syncOutlookBtn.href = data.icsUrl || '#';
+                if (syncGoogleBtn) syncGoogleBtn.href = data.googleAddUrl || '#';
+                if (syncAppleBtn) syncAppleBtn.href = data.icsUrl || '#'; // Use icsUrl here
+                if (syncOutlookBtn) syncOutlookBtn.href = data.icsUrl || '#'; // Use icsUrl here
 
-                 // Set download attribute filename (optional, but good practice for .ics)
+                // Set download attribute filename for ICS links
                 const filename = `${key.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
-                syncAppleBtn.setAttribute('download', data.icsUrl ? filename : '');
-                syncOutlookBtn.setAttribute('download', data.icsUrl ? filename : '');
+                if (syncAppleBtn) syncAppleBtn.setAttribute('download', data.icsUrl ? filename : '');
+                if (syncOutlookBtn) syncOutlookBtn.setAttribute('download', data.icsUrl ? filename : '');
 
 
+                // Make the details container visible (with animation)
                 calendarDetailsContainer.style.display = 'block';
-                 // Use setTimeout to allow the display:block to render before animating
-                 setTimeout(() => {
-                     calendarDetailsContainer.classList.add('visible');
-                     // Scroll into view smoothly
-                     calendarDetailsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                 }, 50); // Small delay
+                setTimeout(() => {
+                    calendarDetailsContainer.classList.add('visible');
+                    // Optional scroll into view
+                    // calendarDetailsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 50); // Short delay for CSS transition
 
-                 // Highlight selected item (optional)
-                 resultsList.querySelectorAll('.result-item').forEach(item => {
-                     item.classList.toggle('selected', item.dataset.key === key);
-                 });
-
+                // Optional: Highlight selected item (if needed, but list is cleared now)
             };
 
+
+            // --- Event Listener Setup ---
             if (searchInput) {
-                // Trigger search on input change (debounced slightly) or form submit
+                // Option 1: Instant update on input
+                searchInput.addEventListener('input', () => {
+                    displayResults(searchInput.value); // Use the list-based display function
+                });
+
+                // Option 2: Debounced update (uncomment if preferred)
+                /*
                 let debounceTimer;
                 searchInput.addEventListener('input', () => {
                     clearTimeout(debounceTimer);
                     debounceTimer = setTimeout(() => {
-                         displayResults(searchInput.value);
-                    }, 300); // 300ms debounce
+                        displayResults(searchInput.value);
+                    }, 300);
                 });
+                */
 
-                 // Also handle form submission (e.g., Enter key)
-                 document.getElementById('search-form').addEventListener('submit', (e) => {
-                     e.preventDefault();
-                     clearTimeout(debounceTimer); // Clear debounce if submitting
-                     displayResults(searchInput.value);
-                 });
+                // Handle direct form submission
+                document.getElementById('search-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    // If using debounce, clear it: clearTimeout(debounceTimer);
+                    displayResults(searchInput.value);
+                });
             }
 
-            // Event delegation for clicking on results
+            // --- Event Listener for Clicks on Results List (Event Delegation) ---
             if (resultsList) {
                 resultsList.addEventListener('click', (e) => {
-                    const targetButton = e.target.closest('.result-item');
+                    const targetButton = e.target.closest('.result-item'); // Check if click was on a result button
                     if (targetButton && targetButton.dataset.key) {
-                        displaySelectedCalendar(targetButton.dataset.key);
+                        const key = targetButton.dataset.key;
+                        displaySelectedCalendar(key); // Show the calendar for the clicked item
                     }
                 });
             }
+
+
+            // Initialize placeholder message on load
+            if (resultsPlaceholder) {
+                resultsPlaceholder.textContent = 'Enter a search term above to find calendars.';
+                resultsPlaceholder.style.display = 'block';
+            }
+            calendarDetailsContainer.style.display = 'none'; // Ensure details are hidden initially
+            calendarDetailsContainer.classList.remove('visible');
+
 
             // --- Scroll Animations ---
             const animatedElements = document.querySelectorAll('.animate-on-scroll');
@@ -725,36 +1012,14 @@
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
                         // observer.unobserve(entry.target); // Optional: Animate only once
-                    } else {
-                         // Optional: Remove class to re-animate if scrolling up
-                         // entry.target.classList.remove('is-visible');
                     }
                 });
-            }, { threshold: 0.1 }); // Adjust threshold as needed (0.1 = 10% visible)
-
+            }, { threshold: 0.1 });
             animatedElements.forEach(el => observer.observe(el));
-
-            // --- Calendly Theme Sync (Placeholder Function) ---
-            // function updateCalendlyTheme(theme) {
-            //     const calendlyWidget = document.querySelector('.calendly-inline-widget iframe');
-            //     if (!calendlyWidget) return;
-            //     let url = new URL(calendlyWidget.src);
-            //     if (theme === 'dark') {
-            //         url.searchParams.set('background_color', '0a192f');
-            //         url.searchParams.set('text_color', 'ccd6f6');
-            //         url.searchParams.set('primary_color', '64ffda');
-            //     } else {
-            //         url.searchParams.set('background_color', 'f4f7fc');
-            //         url.searchParams.set('text_color', '333333');
-            //         url.searchParams.set('primary_color', '3182ce');
-            //     }
-            //     calendlyWidget.src = url.toString();
-            //     console.log("Attempting to update Calendly theme to:", theme);
-            // }
-            // --- Note: Dynamically changing iframe src might reload it. Test thoroughly if using Calendly. ---
 
         }); // End DOMContentLoaded
     </script>
 
 </body>
+
 </html>
