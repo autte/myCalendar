@@ -158,6 +158,82 @@
             padding: var(--container-padding);
         }
 
+        /* Style the container for the popular buttons section */
+        .popular-calendars-container {
+            margin-top: 40px;
+            /* Space above this section */
+            text-align: center;
+        }
+
+        .popular-calendars-container h4 {
+            color: var(--slate-gray);
+            font-size: var(--fz-sm);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Style the flex container holding the buttons */
+        .popular-calendars {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow buttons to wrap on smaller screens */
+            justify-content: center;
+            gap: 20px;
+            /* Space between buttons */
+        }
+
+        /* Style individual popular calendar buttons */
+        .popular-calendar-btn {
+            background-color: var(--light-navy);
+            /* Slightly different background */
+            border: 1px solid var(--lightest-navy);
+            color: var(--light-slate);
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            /* Stack icon and text vertically */
+            align-items: center;
+            gap: 8px;
+            /* Space between icon and text */
+            min-width: 120px;
+            /* Ensure buttons have some width */
+            text-align: center;
+        }
+
+        .popular-calendar-btn i {
+            color: var(--accent-color);
+            /* Use accent color for icon */
+            margin-bottom: 5px;
+            /* Add space below icon */
+        }
+
+        .popular-calendar-btn span {
+            font-size: var(--fz-xs);
+            font-family: var(--font-headings);
+            font-weight: 600;
+        }
+
+        .popular-calendar-btn:hover,
+        .popular-calendar-btn:focus {
+            background-color: var(--lightest-navy);
+            border-color: var(--accent-color);
+            color: var(--white);
+            outline: none;
+            transform: translateY(-3px);
+            /* Slight lift effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .popular-calendar-btn:hover i,
+        .popular-calendar-btn:focus i {
+            color: var(--neon-green);
+            /* Ensure icon matches accent */
+        }
+
         /* Headings & Text */
         h1,
         h2,
@@ -719,6 +795,28 @@
                     aria-label="Search for city or school calendar">
                 <button type="submit" class="btn"><i class="fas fa-search"></i> Search</button>
             </form>
+            <div class="popular-calendars-container animate-on-scroll">
+                <h4>Or select a popular calendar:</h4>
+                <div class="popular-calendars" id="popular-calendars-list">
+                    <button class="popular-calendar-btn" data-key="College St Louis"
+                        aria-label="Show College St Louis Calendar">
+                        <i class="fas fa-university fa-2x"></i> <span>College St Louis</span>
+                    </button>
+
+                    <button class="popular-calendar-btn" data-key="Pointe-Claire Library"
+                        aria-label="Show Pointe-Claire Library Calendar">
+                        <i class="fas fa-book-reader fa-2x"></i>
+                        <span>Pointe-Claire Library</span>
+                    </button>
+
+                    <button class="popular-calendar-btn" data-key="Lester B. Pearson School Board"
+                        aria-label="Show Lester B. Pearson School Board Calendar">
+                        <i class="fas fa-school-flag fa-2x"></i>
+                        <span>LBPSB</span>
+                    </button>
+
+                </div>
+            </div>
         </section>
 
         <section id="results-display" class="container">
@@ -773,7 +871,7 @@
         // Make sure data.js is loaded BEFORE this script if using separate file
         const calendarData = {
             "College St Louis": {
-                embedUrl: "https://calendar.google.com/calendar/embed?src=402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%40group.calendar.google.com&ctz=America%2FToronto", // CORRECT Embed URL using CID
+                embedUrl: "https://calendar.google.com/calendar/embed?src=402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%40group.calendar.google.com&ctz=America%2FMontreal", // CORRECT Embed URL using CID
                 icsUrl: "https://calendar.google.com/calendar/ical/402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%40group.calendar.google.com/public/basic.ics", // Public iCal download URL
                 // Correct Google Add URL requires URL encoding the icsUrl:
                 googleAddUrl: "https://calendar.google.com/calendar/r?cid=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2F402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%2540group.calendar.google.com%2Fpublic%2Fbasic.ics"
@@ -819,7 +917,31 @@
             const syncAppleBtn = document.getElementById('sync-apple');
             const syncOutlookBtn = document.getElementById('sync-outlook');
             const currentYearSpan = document.getElementById('current-year');
+            // --- Event Listener for Clicks on Popular Calendar Buttons (Event Delegation) ---
+            const popularCalendarsList = document.getElementById('popular-calendars-list'); // Get the container
 
+            if (popularCalendarsList) {
+                popularCalendarsList.addEventListener('click', (e) => {
+                    // Find the closest ancestor button with the correct class
+                    const targetButton = e.target.closest('.popular-calendar-btn');
+
+                    if (targetButton && targetButton.dataset.key) {
+                        const key = targetButton.dataset.key; // Get the calendar key (e.g., "College St Louis")
+                        console.log("Popular calendar button clicked:", key); // For debugging
+
+                        // Directly call the function to display this calendar
+                        displaySelectedCalendar(key);
+
+                        // Optional: Clear the search input field if desired
+                        // if (searchInput) searchInput.value = '';
+
+                        // Optional: Scroll to the calendar details
+                        if (calendarDetailsContainer) {
+                            calendarDetailsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            }
             // --- Set Current Year ---
             if (currentYearSpan) {
                 currentYearSpan.textContent = new Date().getFullYear();
@@ -909,6 +1031,8 @@
             // --- Function to Display the Calendar Details ---
             const displaySelectedCalendar = (key) => {
                 const data = calendarData[key];
+
+
                 if (!data || !data.embedUrl) {
                     console.error(`Data or embedUrl missing for key: ${key}`);
                     if (resultsPlaceholder) { // Show error in placeholder
