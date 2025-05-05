@@ -4,1146 +4,511 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>My Calendar AI | Find & Sync Shared Calendars</title>
-    <meta name="description"
-        content="My Calendar AI helps you easily find your city or school's shared calendar and sync it with your Google, Apple, or Outlook calendar.">
-    <meta name="keywords"
-        content="shared calendar, city calendar, school calendar, sync calendar, google calendar, apple calendar, outlook calendar, embed calendar, AI">
-
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <title>Events Near You</title>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <style>
-        /* ============================== */
-        /* CSS Variables & Base Styles  */
-        /* ============================== */
-        :root {
-            /* Color Palette */
-            --navy-blue: #0a192f;
-            --light-navy: #112240;
-            --lightest-navy: #233554;
-            --slate-gray: #8892b0;
-            --light-slate: #a8b2d1;
-            --lightest-slate: #ccd6f6;
-            --white: #ffffff;
-            --neon-green: #64ffda;
-            --neon-green-tint: rgba(100, 255, 218, 0.1);
-
-            /* Typography */
-            --font-sans: 'Open Sans', sans-serif;
-            --font-headings: 'Poppins', sans-serif;
-
-            /* Font Sizes (Example Scale) */
-            --fz-xs: 13px;
-            --fz-sm: 14px;
-            --fz-md: 16px;
-            --fz-lg: 18px;
-            --fz-xl: 20px;
-            --fz-xxl: 24px;
-            --fz-heading: 32px;
-            --fz-hero-heading: clamp(40px, 8vw, 60px);
-            /* Responsive heading */
-
-            /* Layout & Spacing */
-            --border-radius: 4px;
-            --nav-height: 80px;
-            --section-padding: 80px 0;
-            --container-padding: 0 25px;
-            --max-width: 1100px;
-
-            /* Transitions & Effects */
-            --easing: cubic-bezier(0.645, 0.045, 0.355, 1);
-            --transition: all 0.25s var(--easing);
-
-            /* Theming (Dark Default) */
-            --bg-color: var(--navy-blue);
-            --text-color-primary: var(--lightest-slate);
-            --text-color-secondary: var(--slate-gray);
-            --heading-color: var(--white);
-            --accent-color: var(--neon-green);
-            --card-bg: var(--light-navy);
-            --border-color: var(--lightest-navy);
-            --button-text-color: var(--navy-blue);
-            --header-bg: rgba(10, 25, 47, 0.85);
-            /* Semi-transparent header */
-            --box-shadow: rgba(2, 12, 27, 0.7) 0px 10px 30px -15px;
-            --iframe-border: var(--lightest-navy);
-        }
-
-        /* Light Theme */
-        [data-theme="light"] {
-            --bg-color: #f4f7fc;
-            /* Light grayish blue */
-            --text-color-primary: #333;
-            --text-color-secondary: #555;
-            --heading-color: #1a202c;
-            /* Darker heading */
-            --accent-color: #3182ce;
-            /* Adjusted blue accent for light */
-            --card-bg: var(--white);
-            --border-color: #e2e8f0;
-            /* Light gray border */
-            --button-text-color: var(--white);
-            --header-bg: rgba(255, 255, 255, 0.9);
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --navy-blue: #0a192f;
-            /* Keep original names accessible */
-            --neon-green: var(--accent-color);
-            /* Map neon green var to new accent */
-            --neon-green-tint: rgba(49, 130, 206, 0.1);
-            --iframe-border: #ccc;
-        }
-
-        /* Global Resets & Base Styles */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scrollbar-width: thin;
-            scrollbar-color: var(--slate-gray) var(--navy-blue);
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: var(--slate-gray);
-            border-radius: 10px;
-        }
-
+        /* Basic CSS for layout and styling - more comprehensive CSS would be needed */
         body {
-            font-family: var(--font-sans);
-            font-size: var(--fz-md);
-            line-height: 1.6;
-            color: var(--text-color-primary);
-            background-color: var(--bg-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        main {
-            padding-top: var(--nav-height);
-        }
-
-        /* Space for fixed header */
-        section {
-            padding: var(--section-padding);
-        }
-
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: var(--container-padding);
-        }
-
-        /* Style the container for the popular buttons section */
-        .popular-calendars-container {
-            margin-top: 40px;
-            /* Space above this section */
-            text-align: center;
-        }
-
-        .popular-calendars-container h4 {
-            color: var(--slate-gray);
-            font-size: var(--fz-sm);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Style the flex container holding the buttons */
-        .popular-calendars {
-            display: flex;
-            flex-wrap: wrap;
-            /* Allow buttons to wrap on smaller screens */
-            justify-content: center;
-            gap: 20px;
-            /* Space between buttons */
-        }
-
-        /* Style individual popular calendar buttons */
-        .popular-calendar-btn {
-            background-color: var(--light-navy);
-            /* Slightly different background */
-            border: 1px solid var(--lightest-navy);
-            color: var(--light-slate);
-            border-radius: var(--border-radius);
-            padding: 15px 20px;
-            cursor: pointer;
-            transition: var(--transition);
+            font-family: sans-serif;
+            margin: 20px;
             display: flex;
             flex-direction: column;
-            /* Stack icon and text vertically */
-            align-items: center;
-            gap: 8px;
-            /* Space between icon and text */
-            min-width: 120px;
-            /* Ensure buttons have some width */
-            text-align: center;
+            min-height: 100vh;
+
         }
 
-        .popular-calendar-btn i {
-            color: var(--accent-color);
-            /* Use accent color for icon */
-            margin-bottom: 5px;
-            /* Add space below icon */
-        }
-
-        .popular-calendar-btn span {
-            font-size: var(--fz-xs);
-            font-family: var(--font-headings);
-            font-weight: 600;
-        }
-
-        .popular-calendar-btn:hover,
-        .popular-calendar-btn:focus {
-            background-color: var(--lightest-navy);
-            border-color: var(--accent-color);
-            color: var(--white);
-            outline: none;
-            transform: translateY(-3px);
-            /* Slight lift effect */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .popular-calendar-btn:hover i,
-        .popular-calendar-btn:focus i {
-            color: var(--neon-green);
-            /* Ensure icon matches accent */
-        }
-
-        /* Headings & Text */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: var(--font-headings);
-            color: var(--heading-color);
-            margin-bottom: 1rem;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        h1 {
-            font-size: var(--fz-hero-heading);
-        }
-
-        h2 {
-            font-size: var(--fz-heading);
-        }
-
-        h3 {
-            font-size: var(--fz-xxl);
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--text-color-primary);
-        }
-
-        p.secondary {
-            color: var(--text-color-secondary);
-            font-size: var(--fz-sm);
-        }
-
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        a:hover,
-        a:focus {
-            opacity: 0.8;
-            text-decoration: underline;
-            text-decoration-color: var(--accent-color);
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            /* Allows margin/padding */
-            cursor: pointer;
-            border: 1px solid var(--accent-color);
-            border-radius: var(--border-radius);
-            padding: 0.8rem 1.75rem;
-            background-color: var(--accent-color);
-            color: var(--button-text-color);
-            font-family: var(--font-headings);
-            /* Use heading font for buttons */
-            font-size: var(--fz-sm);
-            font-weight: 600;
-            transition: var(--transition);
-            text-align: center;
-            text-decoration: none;
-            /* For <a> elements styled as buttons */
-        }
-
-        .btn:hover,
-        .btn:focus {
-            background-color: transparent;
-            color: var(--accent-color);
-            outline: none;
-            box-shadow: 0 0 0 2px var(--accent-color);
-            /* Focus indicator */
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        /* Forms */
-        input[type="search"],
-        input[type="text"] {
-            padding: 0.8rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            background-color: var(--card-bg);
-            color: var(--text-color-primary);
-            font-size: var(--fz-md);
-            width: 100%;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input[type="search"]:focus,
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px var(--neon-green-tint);
-        }
-
-        /* ============================== */
-        /* Header & Navigation          */
-        /* ============================== */
-        .site-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--nav-height);
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--container-padding);
-            background-color: var(--header-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 100;
-            transition: height 0.3s ease, background-color 0.3s ease;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            background-color: lightgray;
+            /* Add some space below the top bar */
         }
 
-        .site-logo a {
-            font-family: var(--font-headings);
-            font-size: var(--fz-xl);
-            font-weight: 700;
-            color: var(--heading-color);
-            text-decoration: none;
-        }
-
-        .site-logo span {
-            color: var(--accent-color);
-        }
-
-        .main-navigation {
+        .top-bar-left {
             display: flex;
             align-items: center;
-            gap: 15px;
         }
 
-        .nav-menu {
+        .site-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: red;
+            /* Red public icon */
+            color: white;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .site-title {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .top-bar-right nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .top-bar-right nav ul li {
+            margin-left: 20px;
+        }
+
+        .top-bar-right nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 0;
+            align-items: center;
+            flex-wrap: wrap;
+            /* For responsiveness */
+        }
+
+        .top-section input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .top-section .search-location {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .top-section .search-keyword {
+            flex-grow: 1;
+            max-width: 300px;
+        }
+
+        .filter-buttons button {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .filter-buttons button.active {
+            background-color: red;
+            ;
+            /* Blue highlight */
+            color: white;
+            border-color: red;
+        }
+
+        .main-container {
             display: flex;
             gap: 20px;
-            list-style: none;
-        }
-
-        .nav-menu a {
-            font-family: var(--font-headings);
-            font-size: var(--fz-sm);
-            color: var(--text-color-primary);
-            padding: 10px;
-            text-decoration: none;
-        }
-
-        .nav-menu a:hover,
-        .nav-menu a.active {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        .theme-toggle,
-        .menu-toggle {
-            background: none;
-            border: none;
-            color: var(--text-color-primary);
-            font-size: var(--fz-lg);
-            cursor: pointer;
-            padding: 10px;
-            line-height: 1;
-            /* Prevent button height issues */
-            transition: color 0.3s ease;
-        }
-
-        .theme-toggle:hover,
-        .menu-toggle:hover {
-            color: var(--accent-color);
-        }
-
-        .menu-toggle {
-            display: none;
-            z-index: 110;
-        }
-
-        /* Hidden on desktop */
-
-        /* ============================== */
-        /* Search Area                  */
-        /* ============================== */
-        #search-area {
-            text-align: center;
-            padding-top: 100px;
-            padding-bottom: 60px;
-        }
-
-        #search-area h1 {
-            margin-bottom: 1.5rem;
-        }
-
-        #search-area p {
-            max-width: 650px;
-            margin-left: auto;
-            margin-right: auto;
-            color: var(--light-slate);
-        }
-
-        .search-form {
-            display: flex;
-            gap: 10px;
-            max-width: 600px;
-            margin: 30px auto 0;
-        }
-
-        .search-form input {
             flex-grow: 1;
         }
 
-        .search-form .btn {
-            flex-shrink: 0;
-            padding: 0.8rem 1.2rem;
-        }
-
-        /* Slightly adjust padding */
-
-        /* ============================== */
-        /* Results & Calendar Display   */
-        /* ============================== */
-        #results-display {
-            padding-top: 0;
-            /* Reduce padding after search */
-        }
-
-        /* Style the results list container */
-        #results-list {
-            margin-top: 30px;
-            margin-bottom: 40px;
-            max-height: 250px;
-            /* Limit height and allow scroll */
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            background-color: var(--card-bg);
-            padding: 10px;
-        }
-
-        /* Style for scrollbar within results list */
-        #results-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #results-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        #results-list::-webkit-scrollbar-thumb {
-            background-color: var(--slate-gray);
-            border-radius: 6px;
-        }
-
-        /* Style individual result items (buttons) */
-        .result-item {
-            display: block;
-            /* Make button take full width */
-            width: 100%;
-            text-align: left;
-            padding: 12px 15px;
-            border: none;
-            background-color: transparent;
-            color: var(--text-color-primary);
-            font-family: var(--font-sans);
-            font-size: var(--fz-md);
-            cursor: pointer;
-            border-radius: var(--border-radius);
-            transition: background-color 0.2s ease, color 0.2s ease;
-            margin-bottom: 5px;
-            /* Spacing between items */
-        }
-
-        .result-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .result-item:hover,
-        .result-item:focus,
-        .result-item.selected {
-            background-color: var(--neon-green-tint);
-            color: var(--accent-color);
-            outline: none;
-        }
-
-        /* Style the placeholder message inside the results list */
-        #results-placeholder {
-            text-align: center;
+        .sidebar {
+            width: 250px;
             padding: 20px;
-            color: var(--text-color-secondary);
-            font-style: italic;
+            border: 1px solid #eee;
+            border-radius: 5px;
         }
 
-        /* Style the container for the selected calendar details */
-        #selected-calendar-details {
-            margin-top: 40px;
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--box-shadow);
-            /* Animation handled by JS adding class */
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+        .sidebar h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
         }
 
-        #selected-calendar-details.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .filter-group {
+            margin-bottom: 20px;
         }
 
-        #selected-calendar-title {
-            color: var(--accent-color);
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        /* Style the iframe container for aspect ratio */
-        #calendar-embed-container {
-            position: relative;
-            padding-bottom: 75%;
-            /* Aspect ratio 4:3 */
-            height: 0;
-            overflow: hidden;
-            border: 1px solid var(--iframe-border);
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-        }
-
-        #google-calendar-embed {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* Style the sync buttons below the iframe */
-        .sync-options-detailed {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .sync-button {
-            /* Using .btn styles from base */
-            text-align: center;
+        .filter-group-header {
+            cursor: pointer;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
             display: flex;
-            /* Align icon and text */
+            justify-content: space-between;
             align-items: center;
+        }
+
+        .filter-group-content {
+            display: block;
+            /* Initially visible */
+            padding-left: 10px;
+        }
+
+        .filter-group-content.collapsed {
+            display: none;
+        }
+
+        .filter-option label {
+            /*margin-bottom: 5px;*/
+            display: block;
+            cursor: pointer;
+            vertical-align: middle;
+
+        }
+
+        .filter-option {
+            display: flex;
+            /* Enable flexbox for the container */
+            align-items: center;
+            /* Vertically align items in the center */
+            margin-bottom: 5px;
+            /* Keep the margin between options */
+        }
+
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
+            margin-right: 5px;
+            vertical-align: middle;
+            /* Try this */
+        }
+
+        .filter-option.active label {
+            color: #007bff;
+            /* Blue highlight for selected radio */
+            font-weight: bold;
+        }
+
+        .event-list {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .event-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .event-card img,
+        .event-card .icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            object-fit: cover;
+            background-color: #f0f0f0;
+            /* Placeholder */
+            display: flex;
             justify-content: center;
-            gap: 8px;
-            /* Space between icon and text */
-            padding: 0.7rem 1rem;
-            /* Adjust padding */
+            align-items: center;
+            font-size: 2em;
+            /* For icon */
         }
 
-
-        /* ============================== */
-        /* Other Sections (Pricing/Contact) */
-        /* ============================== */
-        #pricing,
-        #contact {
-            text-align: center;
+        .event-details {
+            flex-grow: 1;
         }
 
-        #pricing h2,
-        #contact h2 {
-            margin-bottom: 2rem;
-        }
-
-        .calendly-inline-widget {
-            /* Placeholder styling */
-            min-width: 320px;
-            height: 700px;
-            margin: 30px auto 0;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        /* ============================== */
-        /* Footer                       */
-        /* ============================== */
-        .site-footer {
-            text-align: center;
-            padding: 40px 0;
-            margin-top: 60px;
-            border-top: 1px solid var(--border-color);
-            font-size: var(--fz-xs);
-            color: var(--text-color-secondary);
-        }
-
-        .site-footer p {
+        .event-title {
+            font-weight: bold;
             margin-bottom: 5px;
         }
 
-        .site-footer i {
-            color: var(--accent-color);
+        .event-meta {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 5px;
         }
 
-        /* ============================== */
-        /* Scroll Animations            */
-        /* ============================== */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s var(--easing), transform 0.6s var(--easing);
+        .event-tags {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #555;
         }
 
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
+        .event-tags span {
+            background-color: #f0f0f0;
+            padding: 3px 5px;
+            border-radius: 3px;
+            margin-right: 5px;
         }
 
-        /* ============================== */
-        /* Responsive Design            */
-        /* ============================== */
+        .participant-count {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            :root {
-                --nav-height: 70px;
-                --section-padding: 60px 0;
-            }
-
-            .container {
-                --container-padding: 0 15px;
-            }
-
-            .site-header {
-                padding: 0 15px;
-            }
-
-            .menu-toggle {
-                display: block;
-                /* Show burger */
-            }
-
-            .main-navigation {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                /* Start off-screen */
-                width: min(75vw, 300px);
-                height: 100vh;
-                padding: var(--nav-height) 20px 20px;
-                /* Add padding top */
-                background-color: var(--light-navy);
-                /* Use a theme color */
+            .main-container {
                 flex-direction: column;
-                justify-content: flex-start;
-                /* Align items top */
-                align-items: stretch;
-                /* Stretch items */
-                box-shadow: -10px 0px 30px -15px rgba(2, 12, 27, 0.7);
-                transition: right 0.4s var(--easing);
-                z-index: 105;
-                /* Below toggle, above content */
-                gap: 0;
-                /* Reset gap for column layout */
             }
 
-            .main-navigation.active {
-                right: 0;
-                /* Slide in */
-            }
-
-            .nav-menu {
-                flex-direction: column;
-                text-align: center;
-                gap: 5px;
-                /* Spacing between links */
+            .sidebar {
                 width: 100%;
-                margin-top: 30px;
-                /* Space below header area */
-            }
-
-            .nav-menu li {
-                width: 100%;
-            }
-
-            .nav-menu a {
-                display: block;
-                /* Make link fill space */
-                padding: 15px;
-                font-size: var(--fz-lg);
-                color: var(--lightest-slate);
-                border-bottom: 1px solid var(--lightest-navy);
-            }
-
-            .nav-menu li:last-child a {
-                border-bottom: none;
-            }
-
-            .main-navigation .theme-toggle {
-                margin-top: auto;
-                /* Push theme toggle to bottom */
                 margin-bottom: 20px;
-                /* Space from bottom */
-                align-self: center;
-                /* Center it */
-                color: var(--lightest-slate);
-                /* Ensure visibility */
             }
 
-            .search-form {
+            .top-section {
                 flex-direction: column;
-                gap: 15px;
+                align-items: stretch;
             }
 
-            #calendar-embed-container {
-                padding-bottom: 100%;
-                /* Adjust aspect ratio for mobile if needed */
+            .top-section>* {
+                margin-bottom: 10px;
             }
 
-            .sync-options-detailed {
-                grid-template-columns: 1fr;
-                /* Stack buttons */
+            .filter-buttons {
+                display: flex;
+                overflow-x: auto;
+            }
+
+            .filter-buttons button {
+                flex-shrink: 0;
             }
         }
     </style>
 </head>
 
-<body data-theme="dark">
-    <header class="site-header">
-        <div class="site-logo">
-            <a href="#">MyCalendar <span>AI</span></a>
+<body>
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <div class="site-icon">P</div>
+            <h1 class="site-title">Public Calendar</h1>
         </div>
-        <nav class="main-navigation" id="main-navigation">
-            <ul class="nav-menu">
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-                <i class="fas fa-sun"></i> </button>
-        </nav>
-        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
-            <i class="fas fa-bars"></i>
-        </button>
-    </header>
-
-    <main>
-        <section id="search-area" class="container animate-on-scroll">
-            <h1>Find Your Shared Calendar Instantly.</h1>
-            <p class="secondary">
-                Enter your city, school name, or postal code to find its shared calendar and easily sync it to your
-                personal agenda.
-            </p>
-            <form class="search-form" id="search-form" role="search">
-                <input type="search" id="search-input" placeholder="E.g., College St Louis, H9R 1A3, Westmount" required
-                    aria-label="Search for city or school calendar">
-                <button type="submit" class="btn"><i class="fas fa-search"></i> Search</button>
-            </form>
-            <div class="popular-calendars-container animate-on-scroll">
-                <h4>Or select a popular calendar:</h4>
-                <div class="popular-calendars" id="popular-calendars-list">
-                    <button class="popular-calendar-btn" data-key="College St Louis"
-                        aria-label="Show College St Louis Calendar">
-                        <i class="fas fa-university fa-2x"></i> <span>College St Louis</span>
-                    </button>
-
-                    <button class="popular-calendar-btn" data-key="Pointe-Claire Library"
-                        aria-label="Show Pointe-Claire Library Calendar">
-                        <i class="fas fa-book-reader fa-2x"></i>
-                        <span>Pointe-Claire Library</span>
-                    </button>
-
-                    <button class="popular-calendar-btn" data-key="Lester B. Pearson School Board"
-                        aria-label="Show Lester B. Pearson School Board Calendar">
-                        <i class="fas fa-school-flag fa-2x"></i>
-                        <span>LBPSB</span>
-                    </button>
-
-                </div>
-            </div>
-        </section>
-
-        <section id="results-display" class="container">
-            <div id="results-list" class="animate-on-scroll">
-                <p id="results-placeholder">Enter a search term above to find calendars.</p>
-            </div>
-
-            <div id="selected-calendar-details" style="display: none;">
-                <h3 id="selected-calendar-title"></h3>
-                <div id="calendar-embed-container">
-                    <iframe id="google-calendar-embed" src="" style="border: 0" width="800" height="600" frameborder="0"
-                        scrolling="no" title="Selected Shared Calendar"></iframe>
-                </div>
-                <div class="sync-options-detailed">
-                    <a href="#" id="sync-google" class="btn sync-button google-sync" target="_blank"
-                        rel="noopener noreferrer">
-                        <i class="fab fa-google"></i> Add Google
-                    </a>
-                    <a href="#" id="sync-apple" class="btn sync-button apple-sync" download> <i
-                            class="fab fa-apple"></i> Sync Apple (.ics)
-                    </a>
-                    <a href="#" id="sync-outlook" class="btn sync-button outlook-sync" download> <i
-                            class="fab fa-microsoft"></i> Sync Outlook (.ics)
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section id="pricing" class="container animate-on-scroll">
-            <h2>Simple Pricing</h2>
-            <p>Choose a plan that suits your synchronization needs. Free tier available!</p>
-            <p class="secondary">(Full pricing details coming soon)</p>
-        </section>
-
-        <section id="contact" class="container animate-on-scroll">
-            <h2>Contact Us</h2>
-            <p>Have questions, suggestions, or need help finding a calendar? Get in touch!</p>
-            <a href="mailto:contact@mycalendar.ai" class="btn">Email Us</a>
-        </section>
-
-    </main>
-
-    <footer class="site-footer animate-on-scroll">
-        <div class="container">
-            <p>&copy; <span id="current-year"></span> My Calendar AI. All Rights Reserved.</p>
-            <p>Made with <i class="fas fa-heart"></i> using Vanilla JS</p>
+        <div class="top-bar-right">
+            <nav>
+                <ul>
+                    <li><a href="#">Create Events</a></li>
+                    <li><a href="school-calendars.html">School Calendars</a></li>
+                    <li><a href="#">Shop</a></li>
+                </ul>
+            </nav>
         </div>
-    </footer>
+    </div>
+    <div class="top-section">
+        <input type="text" class="search-location" placeholder="Search by ZIP code or Address">
+        <input type="text" class="search-keyword" placeholder="Search by Keyword, Title, or Group">
+        <div class="filter-buttons">
+            <button class="active" data-filter="public">Public Events</button>
+            <button data-filter="school">School Calendars</button>
+            <button data-filter="other">Others</button>
+        </div>
+    </div>
 
-    <script>
-        // Assume calendarData is loaded from data.js or defined below
-        // Make sure data.js is loaded BEFORE this script if using separate file
-        const calendarData = {
-            "College St Louis": {
-                embedUrl: "https://calendar.google.com/calendar/embed?src=402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%40group.calendar.google.com&ctz=America%2FMontreal", // CORRECT Embed URL using CID
-                icsUrl: "https://calendar.google.com/calendar/ical/402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%40group.calendar.google.com/public/basic.ics", // Public iCal download URL
-                // Correct Google Add URL requires URL encoding the icsUrl:
-                googleAddUrl: "https://calendar.google.com/calendar/r?cid=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2F402cc55f171c9e07f19b2fa2c0e9f23c47bcda205e54c234526276e52386be61%2540group.calendar.google.com%2Fpublic%2Fbasic.ics"
-            },
-            "Westmount City Events": {
-                embedUrl: "https://calendar.google.com/calendar/embed?src=c_schedule%40westmount.org&ctz=America%2FMontreal", // Fictional example
-                icsUrl: "webcal://example.com/westmount-events.ics", // Placeholder ICS - CORRECTED
-                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fwestmount-events.ics" // Placeholder Add URL
-            },
-            "Pointe-Claire Library": {
-                embedUrl: "https://calendar.google.com/calendar/embed?src=c_library%40pointe-claire.ca&ctz=America%2FMontreal", // Fictional example
-                icsUrl: "webcal://example.com/pcl-library.ics", // Placeholder ICS
-                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fexample.com%2Fpcl-library.ics" // Placeholder Add URL
-            },
-            "Lester B. Pearson School Board": {
-                embedUrl: "https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=America%2FToronto&src=bGJwY2EuY29tX3JsaXBvanNjdThwZzBkbGlya2JsYWQydWtrQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23AD1457", // Actual LBPSB Calendar (Example)
-                icsUrl: "webcal://calendar.google.com/calendar/ical/lbpca.com_rlipojscth8pg0dlirkblad2ukk%40group.calendar.google.com/public/basic.ics", // Fictional, get real one if possible
-                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Flbpca.com_rlipojscth8pg0dlirkblad2ukk%2540group.calendar.google.com%2Fpublic%2Fbasic.ics" // Fictional
-            },
-            // --- Add more calendars here ---
-            "Postal H9R Events": { // Example for postal code
-                embedUrl: "https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York", // Example: US Holidays
-                icsUrl: "webcal://calendar.google.com/calendar/ical/en.usa%23holiday%40group.v.calendar.google.com/public/basic.ics",
-                googleAddUrl: "https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fen.usa%2523holiday%40group.v.calendar.google.com%2Fpublic%2Fbasic.ics"
-            }
-        };
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="filter-group">
+                <div class="filter-group-header">
+                    <h3>Event Date</h3>
+                    <span>&#9660;</span>
+                </div>
+                <div class="filter-group-content">
+                    <div class="filter-option">
+                        <input type="radio" id="date-any" name="event-date" value="any" checked>
+                        <label for="date-any" class="active">Any day</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="date-today" name="event-date" value="today">
+                        <label for="date-today">Today</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="date-tomorrow" name="event-date" value="tomorrow">
+                        <label for="date-tomorrow">Tomorrow</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="date-this-week" name="event-date" value="this-week">
+                        <label for="date-this-week">This week</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="date-this-weekend" name="event-date" value="this-weekend">
+                        <label for="date-this-weekend">This weekend</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="date-past" name="event-date" value="past">
+                        <label for="date-past">In the past</label>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-group">
+                <div class="filter-group-header">
+                    <h3>Categories</h3>
+                    <span>&#9660;</span>
+                </div>
+                <div class="filter-group-content collapsed">
+                    <div class="filter-option">
+                        <input type="checkbox" id="category-education" value="education">
+                        <label for="category-education">Education</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="category-city" value="city">
+                        <label for="category-city">City</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="category-other" value="other">
+                        <label for="category-other">Other</label>
+                    </div>
+                </div>
+            </div>
 
+            <div class="filter-group">
+                <div class="filter-group-header">
+                    <h3>Event Status</h3>
+                    <span>&#9660;</span>
+                </div>
+                <div class="filter-group-content">
+                    <div class="filter-option">
+                        <input type="radio" id="status-confirmed" name="event-status" value="confirmed" checked>
+                        <label for="status-confirmed" class="active">Confirmed</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="status-tentative" name="event-status" value="tentative">
+                        <label for="status-tentative">Tentative</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" id="status-cancelled" name="event-status" value="cancelled">
+                        <label for="status-cancelled">Cancelled</label>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Element References ---
-            const body = document.body;
-            const header = document.querySelector('.site-header');
-            const navigation = document.getElementById('main-navigation');
-            const menuToggle = document.getElementById('menu-toggle');
-            const themeToggle = document.getElementById('theme-toggle');
-            const searchInput = document.getElementById('search-input');
-            const resultsList = document.getElementById('results-list'); // Reference needed for clearing/showing buttons
-            const resultsPlaceholder = document.getElementById('results-placeholder');
-            const calendarDetailsContainer = document.getElementById('selected-calendar-details');
-            const calendarTitle = document.getElementById('selected-calendar-title');
-            const calendarEmbed = document.getElementById('google-calendar-embed');
-            const syncGoogleBtn = document.getElementById('sync-google');
-            const syncAppleBtn = document.getElementById('sync-apple');
-            const syncOutlookBtn = document.getElementById('sync-outlook');
-            const currentYearSpan = document.getElementById('current-year');
-            // --- Event Listener for Clicks on Popular Calendar Buttons (Event Delegation) ---
-            const popularCalendarsList = document.getElementById('popular-calendars-list'); // Get the container
+        <main class="event-list">
+            <div class="event-card">
+                <div class="icon">🎉</div>
+                <div class="event-details">
+                    <h2 class="event-title">Community Art Fair</h2>
+                    <p class="event-meta">April 27, 2025, 10:00 AM - 4:00 PM EDT<br>City Hall Plaza, Montreal, QC</p>
+                    <p class="event-meta">Organizer: Montreal Arts Council</p>
+                    <div class="event-tags">
+                        <span>#art</span> <span>#community</span> <span>#free</span>
+                    </div>
+                    <p class="participant-count">25 participants</p>
+                </div>
+            </div>
+            <script>
+                // Initialize Firebase (You should already have this from the Firestore setup)
+                firebase.initializeApp(firebaseConfig);
 
-            if (popularCalendarsList) {
-                popularCalendarsList.addEventListener('click', (e) => {
-                    // Find the closest ancestor button with the correct class
-                    const targetButton = e.target.closest('.popular-calendar-btn');
+                // Get a reference to the Realtime Database
+                const db = firebase.database();
+                const eventsRef = db.ref('events');  //  Use .ref('your_path')
+                document.addEventListener('DOMContentLoaded', () => {
+                    const filterGroupHeaders = document.querySelectorAll('.filter-group-header');
+                    filterGroupHeaders.forEach(header => {
+                        header.addEventListener('click', () => {
+                            const content = header.nextElementSibling;
+                            const isCollapsed = content.classList.contains('collapsed');
+                            content.classList.toggle('collapsed');
+                            header.querySelector('span').textContent = isCollapsed ? '&#9660;' : '&#9658;';
+                        });
+                    });
 
-                    if (targetButton && targetButton.dataset.key) {
-                        const key = targetButton.dataset.key; // Get the calendar key (e.g., "College St Louis")
-                        console.log("Popular calendar button clicked:", key); // For debugging
+                    const radioButtons = document.querySelectorAll('.filter-option input[type="radio"]');
+                    radioButtons.forEach(radio => {
+                        radio.addEventListener('change', function () {
+                            const label = this.nextElementSibling;
+                            document.querySelectorAll('.filter-option label.active').forEach(activeLabel => {
+                                activeLabel.classList.remove('active');
+                            });
+                            label.classList.add('active');
+                        });
+                    });
 
-                        // Directly call the function to display this calendar
-                        displaySelectedCalendar(key);
+                    const topFilterButtons = document.querySelectorAll('.filter-buttons button');
+                    topFilterButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            document.querySelectorAll('.filter-buttons button.active').forEach(activeButton => {
+                                activeButton.classList.remove('active');
+                            });
+                            this.classList.add('active');
+                            // In a real implementation, this would trigger a data filtering update
+                        });
+                    });
 
-                        // Optional: Clear the search input field if desired
-                        // if (searchInput) searchInput.value = '';
-
-                        // Optional: Scroll to the calendar details
-                        if (calendarDetailsContainer) {
-                            calendarDetailsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    }
-                });
-            }
-            // --- Set Current Year ---
-            if (currentYearSpan) {
-                currentYearSpan.textContent = new Date().getFullYear();
-            }
-
-            // --- Theme Management ---
-            const applyTheme = (theme) => {
-                body.dataset.theme = theme;
-                if (themeToggle) {
-                    themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-                }
-                localStorage.setItem('theme', theme);
-                // updateCalendlyTheme(theme); // Optional
-            };
-            const currentTheme = localStorage.getItem('theme') || 'dark';
-            applyTheme(currentTheme);
-            if (themeToggle) {
-                themeToggle.addEventListener('click', () => {
-                    const newTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
-                    applyTheme(newTheme);
-                });
-            }
-
-            // --- Mobile Navigation Toggle ---
-            if (menuToggle && navigation) {
-                menuToggle.addEventListener('click', () => {
-                    const isActive = navigation.classList.toggle('active');
-                    menuToggle.setAttribute('aria-expanded', isActive);
-                    menuToggle.innerHTML = isActive ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-                });
-                navigation.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        if (navigation.classList.contains('active')) {
-                            navigation.classList.remove('active');
-                            menuToggle.setAttribute('aria-expanded', 'false');
-                            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                        }
+                    const eventCards = document.querySelectorAll('.event-card');
+                    eventCards.forEach(card => {
+                        card.addEventListener('click', function () {
+                            const eventId = this.dataset.eventId; // Retrieve the event ID
+                            //window.location.href = `eventsDetail.html?id=${eventId}`;
+                            window.location.href = `eventsDetail.html`;
+                            // In a real application, you would use the eventId to fetch
+                            // the specific event details on the eventsDetail.html page.
+                        });
                     });
                 });
-            }
+            </script>
+            <div class="event-card">
+                <img src="placeholder-event.jpg" alt="School Play">
+                <div class="event-details">
+                    <h2 class="event-title">Northwood High School Play: "Hamlet"</h2>
+                    <p class="event-meta">May 5, 2025, 7:00 PM - 9:00 PM EDT<br>Northwood High Auditorium, Montreal, QC
+                    </p>
+                    <p class="event-meta">Organizer: Northwood High Drama Club</p>
+                    <div class="event-tags">
+                        <span>#school</span> <span>#drama</span> <span>#performance</span>
+                    </div>
+                    <p class="participant-count">8 participants</p>
+                </div>
+            </div>
 
-            // --- Search Filtering and Display (List-Based) ---
-            const displayResults = (query) => {
-                // Clear previous results/state
-                resultsList.innerHTML = '';
-                calendarDetailsContainer.style.display = 'none';
-                calendarDetailsContainer.classList.remove('visible');
-                resultsPlaceholder.style.display = 'none'; // Hide placeholder initially
+        </main>
+    </div>
 
-                const lowerCaseQuery = query.toLowerCase().trim();
-                let hasResults = false;
+    <script>
+        // Basic JavaScript for toggling sidebar filter groups
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterGroupHeaders = document.querySelectorAll('.filter-group-header');
 
-                if (lowerCaseQuery === '') {
-                    resultsPlaceholder.textContent = 'Enter a search term above to find calendars.';
-                    resultsPlaceholder.style.display = 'block';
-                    return;
-                }
-
-                const allKeys = Object.keys(calendarData);
-                const filteredKeys = allKeys.filter(key => key.toLowerCase().includes(lowerCaseQuery));
-
-                if (filteredKeys.length > 0) {
-                    // Hide placeholder only if results are found
-                    resultsPlaceholder.style.display = 'none';
-                    filteredKeys.forEach(key => {
-                        const data = calendarData[key];
-                        if (data && data.embedUrl) { // Ensure data exists
-                            const button = document.createElement('button');
-                            button.classList.add('result-item');
-                            button.textContent = key;
-                            button.dataset.key = key; // Store key to retrieve data on click
-                            resultsList.appendChild(button);
-                            hasResults = true;
-                        }
-                    }); // <-- Missing closing brace added here
-                } // <-- Missing closing brace added here
-
-
-                // Show placeholder only if no results were found AND query was not empty
-                if (!hasResults && lowerCaseQuery !== '') {
-                    resultsPlaceholder.textContent = `No calendars found matching "${query}".`;
-                    resultsPlaceholder.style.display = 'block';
-                }
-            }; // <-- Missing closing brace added here
-
-
-            // --- Function to Display the Calendar Details ---
-            const displaySelectedCalendar = (key) => {
-                const data = calendarData[key];
-
-
-                if (!data || !data.embedUrl) {
-                    console.error(`Data or embedUrl missing for key: ${key}`);
-                    if (resultsPlaceholder) { // Show error in placeholder
-                        resultsPlaceholder.textContent = `Could not load calendar data for "${key}".`;
-                        resultsPlaceholder.style.display = 'block';
-                    }
-                    calendarDetailsContainer.style.display = 'none'; // Ensure details stay hidden
-                    calendarDetailsContainer.classList.remove('visible');
-                    resultsList.innerHTML = ''; // Clear results list too
-                    return;
-                }
-
-                // Clear results list and hide placeholder when showing details
-                resultsList.innerHTML = '';
-                resultsPlaceholder.style.display = 'none';
-
-
-                // Set the title above the calendar
-                if (calendarTitle) calendarTitle.textContent = key;
-
-                // Set the iframe source
-                if (calendarEmbed) {
-                    calendarEmbed.src = data.embedUrl;
-                    calendarEmbed.title = `${key} Shared Calendar`; // For accessibility
-                }
-
-                // Update sync button links
-                if (syncGoogleBtn) syncGoogleBtn.href = data.googleAddUrl || '#';
-                if (syncAppleBtn) syncAppleBtn.href = data.icsUrl || '#'; // Use icsUrl here
-                if (syncOutlookBtn) syncOutlookBtn.href = data.icsUrl || '#'; // Use icsUrl here
-
-                // Set download attribute filename for ICS links
-                const filename = `${key.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
-                if (syncAppleBtn) syncAppleBtn.setAttribute('download', data.icsUrl ? filename : '');
-                if (syncOutlookBtn) syncOutlookBtn.setAttribute('download', data.icsUrl ? filename : '');
-
-
-                // Make the details container visible (with animation)
-                calendarDetailsContainer.style.display = 'block';
-                setTimeout(() => {
-                    calendarDetailsContainer.classList.add('visible');
-                    // Optional scroll into view
-                    // calendarDetailsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 50); // Short delay for CSS transition
-
-                // Optional: Highlight selected item (if needed, but list is cleared now)
-            };
-
-
-            // --- Event Listener Setup ---
-            if (searchInput) {
-                // Option 1: Instant update on input
-                searchInput.addEventListener('input', () => {
-                    displayResults(searchInput.value); // Use the list-based display function
+            filterGroupHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const isCollapsed = content.classList.contains('collapsed');
+                    content.classList.toggle('collapsed');
+                    header.querySelector('span').textContent = isCollapsed ? '&#9660;' : '&#9658;';
                 });
+            });
 
-                // Option 2: Debounced update (uncomment if preferred)
-                /*
-                let debounceTimer;
-                searchInput.addEventListener('input', () => {
-                    clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(() => {
-                        displayResults(searchInput.value);
-                    }, 300);
+            // Add basic highlighting for active radio buttons in sidebar
+            const radioButtons = document.querySelectorAll('.filter-option input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    const label = this.nextElementSibling;
+                    document.querySelectorAll('.filter-option label.active').forEach(activeLabel => {
+                        activeLabel.classList.remove('active');
+                    });
+                    label.classList.add('active');
                 });
-                */
+            });
 
-                // Handle direct form submission
-                document.getElementById('search-form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    // If using debounce, clear it: clearTimeout(debounceTimer);
-                    displayResults(searchInput.value);
+            // Add basic highlighting for active filter buttons in top section
+            const topFilterButtons = document.querySelectorAll('.filter-buttons button');
+            topFilterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    document.querySelectorAll('.filter-buttons button.active').forEach(activeButton => {
+                        activeButton.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    // In a real implementation, this would trigger a data filtering update
                 });
-            }
+            });
 
-            // --- Event Listener for Clicks on Results List (Event Delegation) ---
-            if (resultsList) {
-                resultsList.addEventListener('click', (e) => {
-                    const targetButton = e.target.closest('.result-item'); // Check if click was on a result button
-                    if (targetButton && targetButton.dataset.key) {
-                        const key = targetButton.dataset.key;
-                        displaySelectedCalendar(key); // Show the calendar for the clicked item
-                    }
-                });
-            }
-
-
-            // Initialize placeholder message on load
-            if (resultsPlaceholder) {
-                resultsPlaceholder.textContent = 'Enter a search term above to find calendars.';
-                resultsPlaceholder.style.display = 'block';
-            }
-            calendarDetailsContainer.style.display = 'none'; // Ensure details are hidden initially
-            calendarDetailsContainer.classList.remove('visible');
-
-
-            // --- Scroll Animations ---
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        // observer.unobserve(entry.target); // Optional: Animate only once
-                    }
-                });
-            }, { threshold: 0.1 });
-            animatedElements.forEach(el => observer.observe(el));
-
-        }); // End DOMContentLoaded
+            // In a real application, you would have JavaScript here to:
+            // 1. Fetch event data (e.g., from an API).
+            // 2. Implement the dynamic filtering logic based on search inputs and filter selections.
+            // 3. Update the event list in the main content area whenever filters change.
+            // 4. Handle multi-select for categories and other applicable filters.
+        });
     </script>
-
 </body>
 
 </html>
